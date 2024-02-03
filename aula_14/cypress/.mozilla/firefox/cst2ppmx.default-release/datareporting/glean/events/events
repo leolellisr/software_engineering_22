@@ -1,0 +1,3 @@
+{"timestamp":12259733,"category":"nimbus_events","name":"validation_failed","extra":{"experiment":"merino-py-rollout-for-firefox-suggest-phase-2","reason":"invalid-branch","branch":"control"}}
+{"timestamp":12259733,"category":"nimbus_events","name":"validation_failed","extra":{"reason":"invalid-feature","feature":"majorRelease2022","experiment":"106-major-release-firefox-existing-user-experience"}}
+{"timestamp":12259733,"category":"nimbus_events","name":"validation_failed","extra":{"experiment":"106-major-release-firefox-new-user","reason":"invalid-feature","feature":"majorRelease2022"}}

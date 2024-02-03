@@ -1,0 +1,19 @@
+{
+  "PROJECTS": [
+    "/home/node/test"
+  ],
+  "PROJECT_PREFERENCES": {
+    "test": {
+      "lastBrowser": {
+        "name": "chrome",
+        "channel": "stable"
+      },
+      "testingType": "e2e"
+    }
+  },
+  "COHORTS": {
+    "aci_082022_login": {
+      "cohort": "A"
+    }
+  }
+}

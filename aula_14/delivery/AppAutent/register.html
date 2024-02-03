@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<link rel="stylesheet" href="CSS/main.css"></link>
+
+<head>
+  <style>
+    .link {
+      color: blue;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .link:hover {
+      color: violet;
+    }
+  </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+<body>
+
+<h2>Registro de novos Usuários</h2>
+
+<br>
+<div id="app">
+  <form @submit.prevent="clear">
+    Usuário: <input type="text" v-model="user"><br><br>
+    Senha: <input type="password" v-model="pass"><br><br>
+    <button v-on:click="doADM()">ADMIN</button>
+    <button v-on:click="doUSER()">USER</button><br><br>
+    <b>Cargo:</b>&nbsp;{{ cargo }}<br><br>
+    <hr/><br>
+    <button v-on:click="doPost()">CADASTRAR</button>
+    <button v-on:click="doPut()">ATUALIZAR</button>
+    <button v-on:click="doDelete()">REMOVER</button>
+    <button v-on:click="doGet()">LISTAR</button><br><br>
+    <b>Resultado:</b> {{ mensagem }}
+    <hr/>
+    <b> Usuários </b>
+  </form>
+    <table>
+      <thead>
+        <tr> <th>User</th> <th>Cargo</th> </tr>
+      </thead>
+      <tr id="tabela" v-for="item in result.users" v-bind:aluno="item">
+      	<td> {{ item.user }} </td>
+        <td> {{ item.cargo }} </td>         
+      </tr>
+    </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+var app = new Vue({
+    el: '#app',
+    data: { 
+         result: '',
+         mensagem:'', 
+         user: '',
+         pass: '',
+         cargo: 'Não selecionado'
+    },
+    methods: {
+      // LOGIN
+      doPost: async function() {
+      	app.mensagem = '';
+        var url = "/registration";
+        var data = {"user": app.user, "pass": app.pass, "cargo": app.cargo};
+        if(app.user == '' || app.pass == '' || app.cargo == "Não selecionado") {
+          	app.mensagem = "Insira os campos obrigatórios";
+          	return;
+          }
+        var request = axios({
+                 "method": "post",
+                 "url": url,
+                 "headers": { "Content-Type": "application/json" },
+                 "data": data});
+        try {
+            response = await request
+            app.result = response.data;
+            if(response.data.resultado != undefined) {
+            	app.mensagem = response.data.resultado;
+            }
+            
+        } catch (error) {
+            app.mensagem = "O usuário autenticado não está autorizado a fazer modificações";
+        }
+        app.doClear();
+        app.doShow();           
+      },
+      
+      doPut: async function() {
+      	 app.mensagem = '';
+         var url = "/registration";
+         var data = {"user": app.user, "pass": app.pass, "cargo": app.cargo};
+         if(app.user == '' || app.pass == '' || app.cargo == "Não selecionado") {
+            app.mensagem = "Insira os campos obrigatórios";
+            return;
+          }
+          var request = axios({
+             "method": "put",
+             "url": url,
+             "headers": { "Content-Type": "application/json" },
+             "data": data});
+          try {
+             response = await request
+             app.mensagem = response.data.resultado;
+          } catch(error) {
+             app.mensagem = "O usuário autenticado não está autorizado a fazer modificações";
+          }
+          app.doClear();
+          app.doShow();
+      },
+      
+      doGet: async function() {
+      	 app.mensagem = '';
+      	 var url = "/registration";
+         var request = axios({
+                 "method": "get",
+                 "url": url});
+         try {
+             response = await request
+             app.result = response.data;
+             if(response.data.resultado != undefined) {
+            	app.mensagem = response.data.resultado;
+             }
+         } catch(error) {
+             app.mensagem = "O usuário autenticado não está autorizado a fazer modificações";
+         }
+      },
+      
+      doShow: async function() {
+         var url = "/registration";
+         var request = axios({
+                 "method": "get",
+                 "url": url});
+         try {
+             response = await request
+             app.result = response.data;
+         } catch(error) {
+         }
+      },
+      
+      doDelete: async function() {
+      	  app.mensagem = '';
+          var url = "/registration";
+          var data = {"user": app.user, "pass": app.pass};
+          if(app.user == '' || app.pass == '') {
+          	app.mensagem = "Insira os campos obrigatórios";
+          	return;
+          }
+          var response = {};
+          var request = axios({
+                 "method": "delete",
+                 "url": url,
+                 "headers": { "Content-Type": "application/json" },
+                 "data": data});
+          try {
+              response = await request
+              app.result = response.data;
+              if(response.data.resultado != undefined) {
+            	app.mensagem = response.data.resultado;
+             }
+          } catch(error) {
+              app.mensagem = "O usuário autenticado não está autorizado a fazer modificações";
+          }
+          app.doClear();
+          app.doShow();
+      },
+      
+      // CLOSE WINDOW  
+      closeWindow: async function() {
+          window.close();
+      },
+      
+      doADM: async function() {
+    	  app.cargo = "admin";
+      },
+    
+      doUSER: async function() {
+    	  app.cargo = "user";
+      },
+      
+      doClear: async function() {
+         app.user = '';
+         app.pass = '';
+         app.cargo = "Não selecionado";
+      }
+    }
+  }
+);
+
+</script> 
+
+</body>
+</html>
+

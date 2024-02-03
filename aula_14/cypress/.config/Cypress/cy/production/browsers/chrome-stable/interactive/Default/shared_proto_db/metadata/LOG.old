@@ -1,0 +1,3 @@
+2022/11/18-17:31:18.877 161 Reusing MANIFEST /home/node/.config/Cypress/cy/production/browsers/chrome-stable/interactive/Default/shared_proto_db/metadata/MANIFEST-000001
+2022/11/18-17:31:18.877 161 Recovering log #3
+2022/11/18-17:31:18.878 161 Reusing old log /home/node/.config/Cypress/cy/production/browsers/chrome-stable/interactive/Default/shared_proto_db/metadata/000003.log 

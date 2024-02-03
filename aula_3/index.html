@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Entregável 3</title>
+    <!--External link to CSS-->
+    <link rel="stylesheet" href="CSS/style.css">
+
+    <!--External link to JS-->
+    <script src="JS/menu.js" type="text/javascript"></script>
+  </head>
+
+  <div class="container">
+    <div class="Header">
+      <!--Header Images-->
+      <a href="https://gitlab.unicamp.br/ea202-2022" id="git_unicamp">
+      <img src="IMG/Gitcamp.gif" alt="Gitlab" width = "191" height="70">
+      </a>
+
+      <a href="https://www.fee.unicamp.br/" id="feec">
+      <img src="IMG/feec.png" alt="FEEC" width="160" height="65">
+      </a>
+
+      <!--Header Titles-->
+      <div id="header_title">Engenharia de Software</div><br><br>
+      <div id="header_subtitle">EA202</div>
+    </div>
+
+    <div class="Header_Right"></div>
+    <div class="Header_Left"></div>
+
+<!--
+      Sem deixar cor alterada
+
+      <div class="Menu">
+      <div id="menu">
+        <div id="title_menu"><li>Menu</li></div>
+        <li><a href="#home">HOME</a></li>
+        <li><a href="https://moodle.ggte.unicamp.br/">Moodle</a></li>
+        <div id="title_tutorial"><li>Tutoriais</li></div>
+        <li><a href="https://www.w3schools.com/html/default.asp">HTML</a></li>
+        <li><a href="https://www.w3schools.com/css/default.asp">CSS</a></li>
+        <li><a href=" https://www.w3schools.com/js/default.asp">JS</a></li>
+      </div>
+    </div>
+
+    Deixando cor alterada
+-->
+
+    <div class="Menu">
+    <div id="menu">
+      <div id="title_menu">Menu</div><br>
+      <li><a href="./index.html" id="menuitem" onclick="menuClick(this)">HOME</a></li>
+      <li><a href="https://moodle.ggte.unicamp.br/" id="menuitem" onclick="menuClick(this)">Moodle</a></li>
+      <div id="title_menu">Tutoriais</div><br>
+      <li><a href="https://www.w3schools.com/html/default.asp" id="menuitem" onclick="menuClick(this)">HTML</a></li>
+      <li><a href="https://www.w3schools.com/css/default.asp" id="menuitem" onclick="menuClick(this)">CSS</a></li>
+      <li><a href="https://www.w3schools.com/js/default.asp" id="menuitem" onclick="menuClick(this)">JS</a></li>
+    </div>
+    </div>
+
+    <div class="Form">
+      <!--Date and Hour-->
+      <div id="data">
+        <p id="displayDateTime"></p>
+        <script>
+            var today = new Date();
+
+            var day = today.getDay();
+            var daylist = ["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
+            var day = daylist[day];
+
+            var date = today.getDate() + '/' + (today.getMonth()+1) + '/' +today.getFullYear();
+            var time = today.getHours() + "h" + today.getMinutes();
+            var dateTime = date + ', ' + time;
+            
+            document.getElementById("displayDateTime").innerHTML = day + ', ' + dateTime;
+        </script>
+    </div>
+
+      <!--Form Title and Subtitle-->
+      <h2 id="form_title"> Entregável 3:</h2>
+      <h3 id="form_subtitle"> Formulário Teste </h3>
+
+      <!--Form Inputs-->
+      <div id="ra">
+        <label>RA*:</label>  
+        <input id="ra_input" type="text">  <br> <br> 
+      </div>
+
+      <div id = "name">
+        <label>Nome*: </label> 
+        <input id="name_input" oninput="this.value = this.value.toUpperCase()" type="text"> <br> <br>
+      </div>
+      
+      <div id="city">
+        <label>Naturalidade*:</label> 
+        <input id="city_input" oninput="this.value = this.value.toUpperCase()" type="text">  <br> <br>
+      </div>  
+
+      <div id="birth">
+        <label>Data Nascimento*:</label>
+        <input type="date" id="birth_input">  <br> <br>
+      </div>
+      
+      <!--Dropdown lists-->
+      <div id="semester">
+        <label>Semestre*:</label>
+        <select id="semester_input" type="text">  
+          <!--Form is initially blank-->
+          <option hidden disabled selected value></option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" id = "actual_semester">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value= "6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select><br> <br>  
+      </div>
+
+      <div id="university">
+        <label>Universidade*:</label> 
+        <select id="university_input" name="university"> 
+          <option hidden disabled selected value></option>
+          <option value="unicamp">UNICAMP</option>
+          <option value="unesp">UNESP</option>
+          <option value="usp">USP</option>
+          <option value="ufscar">UFSCAR</option>
+        </select> <br> <br> 
+      </div> 
+
+      <div id="course">
+        <label>Curso*:</label>  
+        <select id="course_input" name="curso"> 
+          <option hidden disabled selected value></option>
+          <option value="eletrica">Engenharia Elétrica</option>
+          <option value="contr">Engenharia de Controle e Automação</option>
+          <option value="comp">Engenharia da Computação</option>
+          <option value="tele">Engenharia de Telecomunicações</option>
+          <option value="comp">Ciência da Computação</option>
+        </select><br> <br> 
+      </div>
+
+      <!--Button-->
+      <button class="button submit" type="enviar" id="enviar">Submit</button>
+    </div>
+
+    <div class="Address_Left">
+      <hr>
+    </div>
+
+    <div class="Address">
+      <hr>
+      Faculdade de Engenharia Elétrica e de Computação<br>
+      UNICAMP - Universidade Estadual de Campinas<br>
+      Av. Albert Einstein 400.<br>
+      13.083-852 Campinas - SP, Brazil<br>
+
+      </a>
+    </div>
+
+    <div class="Address_Right">
+      <hr>
+    </div>
+
+    <script type="text/javascript" src="JS/submit_button.js"></script>
+    
+  </div>
+</html>

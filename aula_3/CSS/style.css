@@ -1,0 +1,244 @@
+.container {
+  display: grid; 
+  grid-template-columns: 180px 980px 180px; 
+  grid-template-rows: 80px 360px 80px; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    "Header_Left Header Header_Right"
+    "Menu Form ."
+    "Address_Left Address Address_Right"; 
+}
+
+/* || GENERAL CONFIGURATIONS OF PAGE'S SECTIONS */
+.Header_Left { 
+  grid-area: Header_Left;
+  background: #E2E0E0; 
+  border-top: solid blue;
+  border-bottom: solid blue;
+  border-left: solid blue;
+  border-width: 2px; 
+}
+
+.Header { 
+  grid-area: Header;
+  text-align: center;
+  line-height: 50%;
+  background: #E2E0E0;
+  font-family: Calibri;
+  border-top: solid blue;
+  border-bottom: solid blue;
+  border-width: 2px;
+}
+
+.Header_Right { 
+  grid-area: Header_Right;
+  background: #E2E0E0;
+  border-top: solid blue;
+  border-bottom: solid blue;
+  border-right: solid blue;
+  border-width: 2px; 
+}
+
+.Menu { 
+  grid-area: Menu;
+  font-family: Calibri;
+}
+
+.Form { 
+  grid-area: Form;
+  font-family: Calibri;
+  font-size: 16;
+  font-weight: bold; 
+}
+
+.Address_Left {
+  grid-area: Address_Left;
+  margin: 36px 2px;
+}
+
+.Address { 
+  grid-area: Address;
+  font-family: Calibri;
+  font-size: 16;
+  font-weight: normal;
+  text-align: center; 
+  margin: 36px 2px;
+
+}
+
+.Address_Right {
+  grid-area: Address_Right;
+  margin: 36px 2px;
+}
+
+/* || HEADER CONFIGURATIONS */
+/* header texts */
+#header_title{
+  position: relative;
+  font-size: 30px;
+  text-align: center;
+  top: 30%;
+}
+
+#header_subtitle{
+  position: relative;
+  font-size: 20px;
+  text-align: center;
+  vertical-align: middle;
+  top: 35%;
+}
+
+/* header images */
+#feec{
+  float: left;
+  text-align:center;
+  margin: 0 auto;
+  padding:5px;
+}
+
+#git_unicamp{
+  float: right;
+  text-align:center;
+  margin: 0 auto;
+  padding:5px;
+}
+
+/* || MENU CONFIGURATIONS */
+/* positon, size and color adjustments */
+#menu {
+  position: relative;
+  left:10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 110px;
+  background-color: #E2E0E0;
+  border-style: solid;
+  border-color: blue;
+  border-width: 1px;
+  list-style-type: none;
+  padding-top: 10px;
+  padding-left: 5px;
+  padding-bottom: 1px;
+}
+
+/* menu titles */
+#title_menu{
+  font-size: 20px;
+  text-decoration: underline;
+  text-decoration-color: black
+}
+
+#title_tutorial{
+  font-size: 20px;
+  text-decoration: underline;
+  text-decoration-color: black
+}
+
+/* menu list configuration */
+li{
+  margin-bottom: 20px;
+  margin-left: 5px;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+#clickeditem {
+  color: rgb(155, 18, 18);
+}
+
+
+/* link colors */
+a {
+  text-decoration:none;
+  font-weight: normal;
+}
+a:link{
+  color: blue;
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: underline;
+}
+a:visited{
+  color:darkred;
+}
+
+/* || FORM CONFIGURATIONS */
+
+/* titles */
+#form_title{
+  position: relative;
+  top: 5px;
+}
+
+#form_subtitle{
+  position: relative;
+  left: 10px;
+}
+
+/* date configuration */
+#date{
+  float: right;
+  font-weight: normal;
+}
+
+/* columns */
+#ra{
+  float: right;
+}
+
+#city{
+  float: right;
+}
+
+#semester{
+  float: right;
+}
+
+/* indicate my current semester */
+#actual_semester{
+  background: lightgrey;
+}
+
+/* forms input and select boxes */
+input{
+  width: 300px;
+  padding: 7px 10px;
+  box-sizing: border-box;
+}
+
+select{
+  width: 300px;
+  padding: 7px 10px;
+  box-sizing: border-box;
+}
+
+/* || FOOTER CONFIGURATIONS */
+
+hr{
+  border-color: blue;
+  margin: 8px 8px;
+}
+
+
+/* || SUBMIT BUTTON ADJUSTMENTS*/
+button{
+  border: 1px solid lightgrey;
+  padding: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: -20px -2px;
+  cursor: pointer;
+}
+
+.submit{
+  position: relative;
+  border-radius: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/*Button changes color when user clicks on it*/
+button.submit:active{background:darkgrey};
