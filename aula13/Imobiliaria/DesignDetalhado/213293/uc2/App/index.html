@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/vuelidate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/validators.min.js"></script>
+
+  <head>
+    <link rel="stylesheet" href="css/style.css"></link>
+  </head>
+
+  <body>
+        <div class="container box menu-box">
+            <div id = "app">
+                <h2>Menu</h2>
+                <div class = "border">
+                    <div class = "aligned_inputs">
+                      <button class = "primary button-margin" v-on:click="doCadastroImovel">Cadastrar imovel</button>
+                      <button class = "primary button-margin" v-on:click="doCatalogo">Catálogo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+  <script>
+    Vue.use(window.vuelidate.default);
+
+    const alphaAndSpace = validators.helpers.regex('alphaAndSpace', /^[a-z\s]*$/i);
+
+    var app = new Vue({
+      el: '#app',
+      methods: {
+
+        doCatalogo: async function () {
+            window.location.href = "catalogo";
+            },
+
+        doCadastroImovel: async function () {
+            window.location.href = "cadastro-imovel";
+            },
+      }
+    }
+    )
+
+  </script> 
+
+
+  </body>
+</html>
+
+
+  

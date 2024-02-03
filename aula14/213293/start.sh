@@ -1,0 +1,2 @@
+cd App
+./start.sh

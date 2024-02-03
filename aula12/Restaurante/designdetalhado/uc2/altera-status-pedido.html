@@ -1,0 +1,108 @@
+<html>
+<head>
+    <link rel="stylesheet" href="C:\Users\fh_ni\Desktop\html\style.css"></link>
+</head>
+    <style>
+        header {
+            background-color:hsla(215, 50%, 23%, 1);
+            border-style: solid;
+            border-width: 5px;
+            color: hsla(215, 50%, 23%, 1);
+            font-family: 'Calibri';
+        }
+        h1 {
+            color: hsla(105, 55%, 96%, 1);
+            text-align: center;
+        }
+        p {
+            color: hsla(105, 55%, 96%, 1);
+            text-align: right;
+        }
+        span {
+            color: hsla(105, 55%, 96%, 1);
+            float: left;
+        }
+        #quit {
+            position: absolute;
+            left: 15%;
+            bottom: 3%;
+            background: hsla(215, 50%, 23%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        #butt {
+            position: static;
+            left: 39.65%;
+            background: rgb(40, 240, 66);
+            color: rgb(19, 20, 19);
+        }
+        #but {
+            position: static;
+            left: 39.65%;
+            background: rgb(233, 247, 48);
+            color: hsla(19, 20, 19);
+        }
+
+
+
+    </style>
+    <header>
+        <h1>Sistema do Cozinheiro</h1>
+        <p>
+            Data: {{}}  Hora: {{}}
+            <span>Nome: {{}}  Cargo: {{}}  </span>
+        </p>
+    </header>
+    <body>
+        <div class="container">
+            <div id="app">
+                <div class="Consulta">
+                    <h2 id="insercao_title"> Pedidos: </h2>
+                    <form @submit.prevent="clear">
+                        <div id="pedido">  
+                            <table margin="auto"; id="data">
+                                <tr v-for = "(pedido, index) in payload.pedidos">
+                                    <td>{{pedidos.pedido}} {{index}}</td>
+                                    <td>{{pedido.status}}</td>
+                                </tr>
+                            </table> 
+                        </div>
+                    </form>
+                    <div>
+                        <button id="but" v-on:Click='doStatusAndamento()'>Em Andamento</button>
+                        <button id="butt" v-on:Click='doStatusPronto()'>Pronto</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#statusP',
+            data: {
+                mensagem: '',
+                status: ''
+            },
+            methods: {
+                doMudaPronto: async function(){
+                    if(app.status == " Em Andamento"){
+                        app.status = "Pronto";
+                        app.mensagem = " Status do pedido alterado para pronto"
+                        return;
+                    }
+                    var data = {"status": app.status};
+                    var request = axios({
+                        "method": "put",
+                        "url": "/pedido",
+                        "data": data
+                    });
+                    try {
+                        response = await request
+                        app.mensagem = response.data.resultado;
+                        
+                    }
+                }
+            }
+        })
+    </script>
+</html>

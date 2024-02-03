@@ -1,0 +1,25 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+/* Configuração da tabela */
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding: 8px;
+    background-color: lightsteelblue;
+}
+
+th {
+    padding: 8px;
+    background-color: steelblue;
+    color: white;
+}

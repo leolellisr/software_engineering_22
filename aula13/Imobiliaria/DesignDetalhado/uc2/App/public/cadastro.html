@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/vuelidate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/validators.min.js"></script>
+
+  <head>
+    <link rel="stylesheet" href="css/style.css"></link>
+  </head>
+
+  <body>
+    <div class="container box cadastro-box">
+        <div id = "app">
+        <h2>Dados do Usuário</h2>
+
+        <div class = "border">
+            <div class = "two_column">
+            <div class = "aligned_inputs">
+                <div>
+                <label for="name" v-bind:class="{ invalid: $v.formData.name.$anyError }">Nome:</label>
+                <input id="name" placeholder = "Nome Sobrenome" v-model="formData.name" v-bind:class="{ invalid: $v.formData.name.$anyError }">
+                </div>
+                <div>
+                <label for="age" v-bind:class="{ invalid: $v.formData.age.$anyError }">Idade:</label>
+                <input id="age" placeholder = " > 18" v-model="formData.age" v-bind:class="{ invalid: $v.formData.age.$anyError }">
+                </div>
+                <div>
+                <label for="rg" v-bind:class="{ invalid: $v.formData.rg.$anyError }">RG:</label>
+                <input id="rg" placeholder = "Somente números" v-model="formData.rg" v-bind:class="{ invalid: $v.formData.rg.$anyError }">
+                </div>
+                <div>
+                <label for="cpf" v-bind:class="{ invalid: $v.formData.cpf.$anyError }">CPF:</label>
+                <input id="cpf" placeholder = "Somente números" v-model="formData.cpf" v-bind:class="{ invalid: $v.formData.cpf.$anyError }">
+                </div>
+            </div>
+            <div class = "aligned_inputs right">
+                <div>
+                <label for="email" v-bind:class="{ invalid: $v.formData.email.$anyError }">Email:</label>
+                <input id="email" v-model="formData.email" v-bind:class="{ invalid: $v.formData.email.$anyError }">
+                </div>
+                <div>
+                <label for="phone" v-bind:class="{ invalid: $v.formData.phone.$anyError }">Telefone:</label>
+                <input id="phone" placeholder = "Somente números" v-model="formData.phone" v-bind:class="{ invalid: $v.formData.phone.$anyError }">
+                </div>
+                <div>
+                <label for="user" v-bind:class="{ invalid: $v.formData.user.$anyError }">Usuario:</label>
+                <input id="user" v-model="formData.user" v-bind:class="{ invalid: $v.formData.user.$anyError }">
+                </div>
+                <div>
+                <label for="password" v-bind:class="{ invalid: $v.formData.password.$anyError }">Senha:</label>
+                <input id="password" placeholder = "Deve conter pelo menos 4 dígitos" v-model="formData.password" type="password" v-bind:class="{ invalid: $v.formData.password.$anyError }">
+                </div>
+            </div>
+            </div>
+
+            <div class = "two_column container mt1">
+            <button class = "primary" v-on:click="onSubmit">Enviar</button>
+            </div>
+        </div>
+
+            <h3 v-if="$v.$dirty && emptyFields" class="mt1 error">Um ou mais campos foram deixados em branco</h3>
+            <h3 v-if="$v.$dirty && errorFields" class="mt1 error">Um ou mais campos são inválidos</h3>
+            <h3 v-if="$v.$dirty && errorSubmit" class="mt1 error">Usuário já existente</h3>
+
+        <div class = "links">
+            <div class="signup_link">
+                    Já é um membro? <a href="login"> Fazer Login</a>
+            </div>
+            <div class="signup_link">
+                    <a href="/">Voltar para página Inicial</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        Vue.use(window.vuelidate.default);
+
+        const alphaAndSpace = validators.helpers.regex('alphaAndSpace', /^[a-z\s]*$/i);
+
+        var app = new Vue({
+        el: '#app',
+        data: { 
+            emptyFields: false,
+            errorFields: false,
+            errorSubmit: false,
+            formData: {
+            name: null,
+            age: null,
+            rg: null,
+            cpf: null,
+            email: null,
+            phone: null,
+            user: null,
+            password: null,
+            }
+        },
+
+        validations: {
+            formData: {
+            name: {
+                required: validators.required,
+                minLength: validators.minLength(4),
+                alphaAndSpace
+            },
+            age: {
+                required: validators.required,
+                minValue: validators.minValue(18)
+            },
+            rg: {
+                required: validators.required,
+                between: validators.between(100_000_000, 999_999_999)
+            },
+            cpf: {
+                required: validators.required,
+                between: validators.between(10_000_000_000, 99_999_999_999)
+            },
+            email: {
+                required: validators.required,
+                email: validators.email
+            },
+            phone: {
+                required: validators.required,
+                between: validators.between(10_000_000_000, 99_999_999_999)
+            },
+            user: {
+                required: validators.required
+            },
+            password: {
+                required: validators.required,
+                minLength: validators.minLength(4)
+            }
+            }
+        },
+
+        methods: {
+
+            onSubmit: async function (event) {
+            app.emptyFields = false;
+            app.errorFields = false;
+            this.errorSubmit = false;
+
+            this.$v.$touch();
+
+            app.emptyFields = Object.values(this.$v.formData).some(o => o.required === false);
+            console.log(this.$v);
+
+            app.errorFields = !app.emptyFields && this.$v.$error;
+
+            if (this.$v.$error) {
+                return;
+            }
+
+            const response = await this.doPost();
+            console.log(response);
+            if (response === 200) {
+                window.location.href = "login";
+            } else {
+                this.errorSubmit = true;
+            }
+            },
+
+            doPost: async function () {
+            var url = "/user";
+            var data = app.formData;
+            var request = axios({
+                "method": "post",
+                "url": url,
+                "headers": { "Content-Type": "application/json" },
+                "data": data});
+            try {
+                return (await request).status;
+            } catch (error) {
+                return error.response.status;
+            }
+            },
+        }
+        }
+        )
+
+    </script> 
+
+
+    </body>
+</html>
+

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="CSS/main.css">     
+</head>
+
+<body>
+<header>
+<div id="header">
+    <div id="cantoEsquerdo">
+    </div>
+    <div id="headerCentral">
+        <a href="https://www.fee.unicamp.br/">
+            <img id="feec" src="img/feec.png" alt="Logo FEEC">
+        </a>
+        <a href="https://gitlab.unicamp.br/ea202-2021">
+            <img id="unigit" src="img/unigit.png" alt="Logo unicamp e gitlab">
+        </a>
+        <p>Engenharia de Software<br>EA202</p>
+    </div>
+    <div id="cantoDireito">
+    </div>
+</div>
+</header>
+
+<section>
+  <nav>
+      <div id="menu">
+          <ul id="menuLista">
+              <li id=tituloLista>Menu</li>
+              <div id="links">
+              <li><a id="link" href="">HOME</a></li>
+              <li><a href="https://moodle.ggte.unicamp.br/">Moodle</a></li>
+              <li id=tituloLista>Tutoriais</li>
+              <li><a href="https://www.w3schools.com/html/default.asp">HTML</a></li>
+              <li><a href="https://www.w3schools.com/css/default.asp">CSS</a></li>
+              <li><a href="https://www.w3schools.com/js/default.asp">JavaScript</a></li>
+              </div>
+          </ul>
+      </div>
+      <div id="colunaDireita">
+      </div>
+  </nav>
+  <article>
+    <div id="principal">
+        <p id="data_local"></p>
+        <h1>Entregável 3</h1>
+        <h2>Formulário Teste</h2>
+        <form id="formulario" onsubmit="return validarFormulario()">
+            <div id = colunaEsquerdaPrincipal>
+                <label for="name">Nome*</label><br>
+                <input type="text" id="name" name="name" onkeypress="return soLetras(event)"><br>
+                <label for="data">Data de Nascimento*</label><br>
+                <input type="date" id="data" name="data"><br>
+                <label for="universidade">Universidade*</label><br>
+                <select name="universidade">
+                <option value="unicamp">Unicamp</option>
+                <option value="usp">USP</option>
+                <option value="puc">PUC</option>
+                <option value="ufrj">UFRJ</option>
+                </select><br>
+                <label for="curso">Curso*</label><br>
+                <select name="curso">
+                    <option value="computacao">Engenharia da Computação</option>
+                    <option value="eletrica">Engenharia Elétrica</option>
+                    <option value="quimica">Engenharia Química</option>
+                    <option value="matematica">Matemática</option>
+                </select><br>
+            </div>
+            <div id="colunaDireitaPrincipal">
+                <label for="ra" patern="[0-9]{6}">RA*</label><br>
+                <input type="text" id="ra" name="ra" onkeypress="return soNumeros(event)" maxlength="6"><br>
+                <label for="naturalidade">Naturalidade*</label><br>
+                <input type="text" name="naturalidade" onkeypress="return soLetras(event)"><br>
+                <label for="semestre">Semestre*</label><br> 
+                <select name="semestre">
+                    <option value="primeiro">1</option>
+                    <option value="segundo">2</option>
+                    <option value="terceiro">3</option>
+                    <option value="quarto">4</option>
+                    <option value="quinto">5</option>
+                    <option value="sexto" selected>6</option>
+                    <option value="setimo">7</option>
+                    <option value="oitavo">8</option>
+                    <option value="nono">9</option>
+                    <option value="decimo">10</option>
+                </select><br>
+                <button id="botao">Submit</button>
+        </form>
+    </div>
+  </article>
+</section>
+
+<footer>
+<div id="footer">
+    <p>
+    <img id="unicamp" src="img/unicamp.png">
+    Faculdade de Engenharia Elétrica e de Computação 
+    <br>
+    UNICAMP - Universidade Estadual de Campinas
+    <br>
+    Av. Albert Einstein 400. 
+    <br>
+    13.083-852 Campinas - SP, Brazil
+    </p>    
+</div>
+</footer>
+
+<script type="text/javascript" src="JS/main.js"></script>
+</body>
+</html> 

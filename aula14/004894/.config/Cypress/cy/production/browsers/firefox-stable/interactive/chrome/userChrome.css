@@ -1,0 +1,4 @@
+#urlbar:not(.megabar), #urlbar.megabar > #urlbar-background, #searchbar {
+  background: -moz-Field !important;
+  color: -moz-FieldText !important;
+}

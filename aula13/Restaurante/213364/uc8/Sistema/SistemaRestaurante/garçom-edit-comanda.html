@@ -1,0 +1,411 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+    <style>
+        header {
+            background-color:hsla(215, 50%, 23%, 1);
+            border-style: solid;
+            border-width: 5px;
+            color: hsla(215, 50%, 23%, 1);
+            font-family: 'Calibri';
+        }
+        h1 {
+            color: hsla(105, 55%, 96%, 1);
+            text-align: center;
+        }
+        p {
+            color: hsla(105, 55%, 96%, 1);
+            text-align: right;
+        }
+        span {
+            color: hsla(105, 55%, 96%, 1);
+            float: left;
+        }
+        body {
+            background-color:hsla(182, 43%, 76%, 1);
+            font-family:'Georgia'; 
+        }
+        #add {
+            background-color: hsla(105, 55%, 96%, 1);
+            width: 46.5%;
+            height: 68%;
+            padding: 10px;
+            border: 3px solid hsla(105, 55%, 96%, 1);
+            margin: 0;
+            right: 0.65%;
+            bottom: 2%;
+            position: absolute;
+        }
+        #resp {
+            text-align: left;
+            color:hsla(215, 50%, 23%, 1);
+        }
+        #list {
+            background-color: hsla(105, 55%, 96%, 1);
+            height: 61%;
+            width: 46.5%;
+            padding: 10px;
+            border: 3px solid hsla(105, 55%, 96%, 1);
+            margin: 0;
+            left: 0.65%;
+            bottom: 9%;
+            position: absolute;
+        }
+        #quit {
+            position: absolute;
+            left: 15%;
+            bottom: 3%;
+            background: hsla(215, 50%, 23%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        #but {
+            background: hsla(203, 39%, 44%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        .Tabela {
+            overflow-y: auto;
+            height: 90%;
+        }
+        .Tabela .tg-head .tg-ahzk {
+            position: sticky;
+            top: 0;
+        }
+        .tg {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .tg-baqh {
+            padding: 8px 16px;
+            border: 1px solid black;
+            color: hsla(215, 50%, 23%, 1);
+            text-align: center;
+        }
+        .tg-ahzk {
+            background: hsla(215, 50%, 23%, 1);
+            color : hsla(105, 55%, 96%, 1);
+            padding: 8px 16px;
+            border: 1px solid black;
+        }
+        #beb, #prat, #sobre {
+            background: hsla(203, 39%, 44%, 1);
+            color : hsla(105, 55%, 96%, 1);
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+        #beb {
+            margin-left: 70px;
+        }
+        #but2 {
+            background: hsla(203, 39%, 44%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        .Tabela2 {
+            overflow-y: auto;
+            height: 50%;
+        }
+        .Tabela2 .tg-head2 .tg-ahzk2 {
+            position: sticky;
+            top: 0;
+        }
+        .tg2 {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .tg-baqh2 {
+            padding: 8px 16px;
+            border: 1px solid black;
+            color: hsla(215, 50%, 23%, 1);
+            text-align: center;
+        }
+        .tg-ahzk2 {
+            background: hsla(215, 50%, 23%, 1);
+            color : hsla(105, 55%, 96%, 1);
+            padding: 8px 16px;
+            border: 1px solid black;
+        }
+        #prato_peso {
+            display: block;
+            float: left;
+            margin-left: 10%;
+        }
+        #prato_preco {
+            display: block;
+            float: right;
+            margin-right: 20%;
+        }
+        #prato_peso_input {
+            display: block;
+            float: left;
+            margin-left: 10%;
+            background: hsla(203, 39%, 44%, 1);
+            color : hsla(105, 55%, 96%, 1);
+            text-align: center;
+        }
+        #prato_preco_input {
+            display: block;
+            float: right;
+            margin-right: 10%;
+            background: hsla(203, 39%, 44%, 1);
+            color : hsla(105, 55%, 96%, 1);
+            text-align: center;
+        }
+        #butt {
+            position: absolute;
+            left: 39.65%;
+            background: hsla(203, 39%, 44%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        #butto {
+            position: relative;
+            left: 35%;
+            background: hsla(203, 39%, 44%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        #sist-resp {
+            text-align: left;
+            color:hsla(215, 50%, 23%, 1);
+        }
+    </style>
+    <header>
+        <div id="tdc">
+            <h1>Garçom: Edição da Comanda {{ cook_com }}</h1>
+            <p>
+                Data: [ {{ dia }} ]  Hora: [ {{ hora }} ]
+                <span> Nome: [ {{ cook_user.user }} ] Cargo: [ {{ cook_user.role }} ]  </span>
+            </p>
+        </div>
+    </header>
+    <body>
+        <button id="quit" v-on:click="doEntraGarMain()">RETORNAR À JANELA PRINCIPAL</button>
+        <div id="add">
+            <button id="beb" v-on:click="doGetCardapio('bebidas')">BEBIDAS</button>
+            <button id="prat" v-on:click="doGetCardapio('pratos')">PRATOS</button>
+            <button id="sobre" v-on:click="doGetCardapio('sobremesa')">SOBREMESA</button><br><br>
+            <div class="Tabela2">
+                <table class="tg2">
+                    <thead class="tg-head2" v-if="itens.length >= 0">
+                    <tr>
+                        <th v-if="tip == 'none'" class="tg-ahzk2"> N/A </th>
+                        <th v-if="tip == 'bebidas'" class="tg-ahzk2"> Bebida </th>
+                        <th v-if="tip == 'pratos'" class="tg-ahzk2"> Prato </th>
+                        <th v-if="tip == 'sobremesa'" class="tg-ahzk2"> Sobremesa </th>
+                        <th class="tg-ahzk2"> Preço </th>
+                        <th class="tg-ahzk2"> Operação </th>
+                    </tr>
+                    </thead>
+                    <tbody class="tg-body2" v-if="itens.length > 0 && tip != 'none'">
+                        <tr v-for="item in itens">
+                        <td class="tg-baqh2"> {{ item.nome }} </td>
+                        <td class="tg-baqh2"> R$ {{ item.preco }} </td>
+                        <td class="tg-baqh2"><button id="but2" v-on:click="doAddItem(item.nome, item.preco)">ADICIONAR UNIDADE</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><br>
+            <label id="prato_peso"> Inserir o peso do prato: </label>
+            <label id="prato_preco"> Preço por kilo: </label><br><br>
+            <input type="number" v-model="peso" id="prato_peso_input" value="" maxlenght="2">
+            <input type="number" v-model="preco" id="prato_preco_input" value="" maxlenght="2"><br><br><br>
+            <button id="butt" v-on:click="doAddPrato()">ADICIONA PRATO</button><br>
+            <p id="sist-resp">Resposta do Sistema: {{ mensagem }} </p>
+        </div>
+        <div id="list">
+            <button id="butto" v-on:click="doList()">LISTAR ITENS DA COMANDA</button><br><br>
+            <div class="Tabela">
+                <table class="tg">
+                    <thead class="tg-head" v-if="itens.length >= 0">
+                    <tr>
+                        <th class="tg-ahzk"> Item </th>
+                        <th class="tg-ahzk"> Preço </th>
+                        <th class="tg-ahzk"> Quantidade </th>
+                        <th class="tg-ahzk"> Operação </th>
+                    </tr>
+                    </thead>
+                    <tbody class="tg-body" v-if="itens.length > 0">
+                        <tr v-for="item in itens">
+                        <td class="tg-baqh"> {{ item.nome }} </td>
+                        <td class="tg-baqh"> R$ {{ item.preco }} </td>
+                        <td class="tg-baqh"> {{ item.quant }} </td>
+                        <td class="tg-baqh"><button id="but" v-on:click="doDelItem(item.nome, item.preco)">REMOVER UNIDADE</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while(c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if(c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        var app = new Vue({
+            el: '#tdc',
+            data: {
+                hora: '',
+                dia: ''
+            },
+            computed: {
+                cook_user: function() {
+                    this.up;
+                    if(getCookie("User") == "") {
+                        return {"user":"Não logado","role":"Nenhum"};
+                    }
+                    else { 	
+                        return JSON.parse(decodeURIComponent(document.cookie).replace('userAuth=',''));
+                    }
+                },
+                cook_com: function() {
+                    this.up;
+                    if(getCookie("Comanda") == "") {
+                        return "<<Error>>";
+                    }
+                    else { 	
+                        return getCookie("Comanda");
+                    }
+                }
+            }
+        });
+        var app2 = new Vue({
+            el: "#add",
+            data: {
+                tip: 'none',
+                itens: [{"nome":"Picanha","preco":"55.60"}],
+                peso: '',
+                preco: '89.78',
+                mensagem: ''
+            },
+            methods: {
+                doAddItem: async function(nome, preco) {
+                    var data = {"nome": nome, "preco": preco, "quant": "1"};
+                    var url = "/comanda/" + getCookie("Comanda");
+                    var request = axios({
+                        "method": "post",
+                        "url": url,
+                        "data": data
+                    });
+                    try {
+                        var response = await request;
+                        app2.mensagem = response.data.resultado;
+                        app3.doList();
+                    }
+                    catch (error) {
+                        app2.mensagem = error.response.data;
+                        return;
+                    }
+                },
+                doAddPrato: async function() {
+                    if((this.peso == undefined || this.peso.length == 0) || (this.preco == undefined || this.preco.length == 0)) {
+   		         app2.mensagem = "É necessário preencher o campo de informção acima";
+   		         return;                
+                    }
+                    var preco_calc = parseFloat(app2.peso) * parseFloat(app2.preco);
+                    preco_calc = (preco_calc.toFixed(2)).toString();
+                    var data = {"nome": "Prato: " + app2.peso + " Kg", "preco": preco_calc, "quant": "1"};
+                    var url = "/comanda/" + getCookie("Comanda");
+                    var request = axios({
+                        "method": "post",
+                        "url": url,
+                        "data": data
+                    });
+                    try {
+                        var response = await request;
+                        app2.mensagem = response.data.resultado;
+                        this.doClear();
+                        app3.doList();
+                    }
+                    catch (error) {
+                        app2.mensagem = error.response.data;
+                        return;
+                    }
+                },
+                doGetCardapio: async function(tipo) {
+                    this.tip = tipo;
+                    var request = axios({
+                        "method": "get",
+                        "url": "/cardapio/" + tipo,
+                        "data": ""
+                    });
+                    try {
+                        var response = await request;
+                        this.itens = response.data.cardapio;
+                        app2.mensagem = "Cardápio consultado";
+                    }
+                    catch (error) {
+                        app2.mensagem = error.response.data;
+                        return;
+                    }
+                },
+                doClear: async function() {
+                    app2.peso = '';
+                }
+            }
+        });
+        var app3 = new Vue({
+            el: "#list",
+            data: {
+                itens: [{"nome":"Coca","preco":"2.50","quant":"3"}]
+            },
+            methods: {
+                doList: async function() {
+                    var request = axios({
+                        "method": "get",
+                        "url": "/comanda/" + getCookie("Comanda"),
+                        "data": ""
+                    });
+                    try {
+                        var response = await request;
+                        this.itens = response.data.coms.itens;
+                    }
+                    catch (error) {
+                        app2.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções";
+                        return;
+                    }
+                },
+                doDelItem: async function(nome, preco) {
+                    var data = {"nome": nome, "preco": preco};
+                    var url = "/comanda/" + getCookie("Comanda");
+                    var request = axios({
+                        "method": "delete",
+                        "url": url,
+                        "data": data
+                    });
+                    try {
+                        var response = await request;
+                        app2.mensagem = response.data.resultado;
+                        this.doList();
+                    }
+                    catch (error) {
+                        app2.mensagem = error.response.data;
+                        return;
+                    }
+                }
+            }
+        });
+        var app4 = new Vue({
+            el: "#quit",
+            methods: {
+                doEntraGarMain: async function() {
+                    window.location.replace("/page/gar-main", "Garçom Main", "_self");
+                }
+            }
+        });
+        var timerDT = setInterval(getDT, 1000);
+        function getDT() {
+            let today = new Date();
+            app.dia = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+            app.hora = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        };
+        app3.doList();
+    </script>
+</html>

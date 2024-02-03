@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+  body {padding: 20px;}
+  h1 {color: black; text-align: center;}
+  .tg  {border-collapse:collapse;border-spacing:0;}
+  .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:16px; overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:16px; font-weight:bold;overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg .tg-baqh{text-align:center;vertical-align:top}
+  .tg .tg-ahzk{background-color:AntiqueWhite;color:Black;text-align:center;vertical-align:top}
+  tr:nth-child(even) {background-color: #f2f2f2;}
+</style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<body>
+
+<h1>Cadastro de rodoviárias</h1>
+
+<br>
+
+<div id="app">
+  <form @submit.prevent="clear">
+    Rodoviária: <input id="input1" type="text" maxlength="40" size=20 v-model="nome_rodoviaria"><br><br>
+    <button id="button1" v-on:click="acessa()">ACESSA</button> &nbsp;
+    <button id="button2" v-on:click="insere()">INSERE</button> &nbsp;
+  </form>
+  <br><br>
+  <b>Resultado:</b> {{ mensagem }}<br><br>
+
+  <table class="tg">
+    <thead v-if="rodoviarias.length > 0">
+      <tr>
+          <th class="tg-ahzk"> Rodoviária </th>
+          <th class="tg-ahzk"> Operation </th>
+      </tr>
+    </thead>
+    <tbody v-if="rodoviarias.length > 0">
+        <tr v-for="rod in rodoviarias">
+          <td class="tg-baqh"> {{ rod.rodoviaria }} </td>
+          <td class="tg-baqh"><button v-on:click="remo(rod.rodoviaria)">REMOVE</button></td>
+        </tr>
+    </tbody>
+  </table>
+  
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+         mensagem: '',
+         nome_rodoviaria: '',
+         rodoviarias: ''
+    },
+    methods: {
+
+    // ACESSA
+    acessa: async function() {
+      app.rodoviarias = '';
+      app.mensagem = '';
+      var request = axios({
+                 "method": "get",
+                 "url": "/rodoviarias"});
+      try {
+         response = await request
+         if(response.rodoviarias != null) {
+             app.mensagem = response;
+             app.rodoviarias = response.data.rodoviarias;
+          } else {
+             app.mensagem = response.data.resultado;
+             app.rodoviarias = response.data.rodoviarias;
+          }         
+      } catch (error) {
+         app.mensagem = "Usuário não autenticado ou não autorizado"
+      }
+    },
+
+    // INSERE
+    insere: async function() {
+      app.rodoviarias = '';
+      app.mensagem = '';
+      if (!app.nome_rodoviaria) {
+             app.mensagem = "É necessário preencher o campo acima";
+             return;
+      }
+      var data = {"rodoviaria": app.nome_rodoviaria};
+      var request = axios({
+                 "method": "post",
+                 "url": "/rodoviarias",
+                 "data": data});
+      try {
+         response = await request
+         app.mensagem = response.data.resultado;
+      } catch (error) {
+        app.mensagem = "Usuário não autenticado ou não autorizado";
+      }
+    },
+
+  // REMOVE
+  remo: async function(nome) {
+     app.rodoviarias = '';
+     app.mensagem = '';
+     var request = axios({
+                 "method": "delete",
+                 "url": "/rodoviarias/" + nome});
+      try {
+        response = await request
+        app.mensagem = response.data.resultado;
+      } catch(error) {
+        app.mensagem = "Usuário não autenticado ou não autorizado";
+      }
+   },
+   
+  }
+  } 
+  )
+  </script> 
+
+</body>
+</html>
+

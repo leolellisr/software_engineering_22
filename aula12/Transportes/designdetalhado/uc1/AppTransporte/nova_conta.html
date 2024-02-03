@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .link {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .link:hover {
+            color: violet;
+        }
+    </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+
+<body>
+    <h2>Criação de conta</h2>
+
+    <br>
+    <div id="app">
+        <form @submit.prevent="clear">
+            Nome: <input type="text" v-model="nome"><br><br> Senha: <input type="password" v-model="senha"><br><br> Email: <input type="text" v-model="email"><br><br> Telefone: <input type="text" v-model="telefone"><br><br>
+            <button v-on:click="doNovaconta()">Criar conta</button><br><br>
+        </form>
+        <b>Resultado:</b>&nbsp;{{ mensagem }}
+        <div v-if="sucesso == true"><a @click="closeWindow" class="link"> Clique aqui para fechar a janela </a></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                mensagem: '',
+                usuarios: '',
+                nome: '',
+                senha: '',
+                email: '',
+                telefone: '',
+                sucesso: false
+            },
+            methods: {
+
+                // INSERE
+                doNovaconta: async function() {
+                    var url = "/usuarios";
+                    if (app.nome == undefined || app.nome.length == 0 ||
+                        app.senha == undefined || app.senha.length == 0 ||
+                        app.email == undefined || app.email.length == 0 ||
+                        app.telefone == undefined || app.telefone.length == 0) {
+                        app.mensagem = "É necessário preencher todos os campos acima";
+                        return;
+                    }
+                    var data = {
+                        "nome": app.nome,
+                        "senha": app.senha,
+                        "email": app.email,
+                        "telefone": app.telefone
+                    };
+                    var request = axios({
+                        "method": "post",
+                        "url": url,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "data": data
+                    });
+                    try {
+                        response = await request
+                        app.mensagem = response.data;
+                        app.payload = response;
+                        app.sucesso = true
+                    } catch (error) {
+                        app.mensagem = "Erro ao criar conta";
+                        app.sucesso = false
+                    }
+                },
+                closeWindow: async function() {
+                    window.close();
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,211 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+    <link rel="stylesheet" href="../style.css">
+    <header>
+        <div id="tdc">
+            <h1>Termino do pedido</h1>
+            <p>Data: [ {{ dia }} ]  Hora: [ {{ hora }} ]
+            <span>Nome: [ {{ cook_user.user }} ] Cargo: [ {{ cook_user.role }} ]  </span></p>
+        </div>
+    </header>
+    <body>
+        <div id="finish">
+            <h2>Revisão da Comanda</h2>
+            <p></p>
+            <div>
+                <table class="tg">
+                    <thead class="tg-head">
+                    <tr>
+                        <th class="tg-ahzk"> Item </th>
+                        <th class="tg-ahzk"> Preço </th>
+                        <th class="tg-ahzk"> Quantidade </th>
+                    </tr>
+                    </thead>
+                    <template v-for="item in comanda.itens">
+                        <tbody class="tg-body">
+                            <td class="tg-baqh"> {{ item.item }} </td>
+                            <td class="tg-baqh"> R$ {{ item.preco }} </td>
+                            <td class="tg-baqh"> {{ item.quantidade }} </td>
+                        </tbody>
+                    </template>
+                </table>
+            </div>
+            <p></p>
+            Preço total: R$ {{ calcularPreco() }} 
+            <p></p>
+            Selecione o metodo de pagamento:
+            <p></p>
+            <button id="sobre" v-on:click="selDinheiro()">Dinheiro</button> 
+            <button id="sobre" v-on:click="selCartao()">Cartão</button> 
+            <p></p>
+            <button id="quit" v-on:click="doRetornarParaComandas()">RETORNAR À JANELA PRINCIPAL</button>
+            <div v-if='isCartao'>
+                Insira o número de identificação do seu cartão<br><br>
+                <form>
+                    <label for="cartao1"></label>
+                    <input type="text" id="cartao1" name="cartao1" size="2" maxlength="4">&nbsp;
+                    <label for="cartao2"></label>
+                    <input type="text" id="cartao2" name="cartao2" size="2" maxlength="4">&nbsp;
+                    <label for="cartao3"></label>
+                    <input type="text" id="cartao3" name="cartao3" size="2" maxlength="4">&nbsp;
+                    <label for="cartao4"></label>
+                    <input type="text" id="cartao4" name="cartao4" size="2" maxlength="4">&nbsp;
+                    <br>
+                </form> 
+                <button id="sobre" v-on:click="doTerminarComandaCartao()">Finalizar</button>
+            </div>
+            <div v-if='isDinheiro'>
+                Insira o saldo pago<br><br>
+                <form>
+                    <input type="text" v-model="valorPago" size="5" maxlength="4">&nbsp;
+                    <br>
+                </form> 
+                <div v-if='insuficiente' id="insuficiente">
+                    Saldo insuficiente!
+                </div>
+                <button id="sobre" v-on:click="doTerminarComanda()">Finalizar</button>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        var app = new Vue({ // App vue que lida com o usuario logado e a hora (header)
+            el: '#tdc',
+            data: {
+                hora: '',
+                dia: ''
+            },
+            computed: {
+                cook_user: function() {
+                    this.up;
+                    if(getCookie("User") == "") {
+                        return {"user":"Não logado","role":"Nenhum"};
+                    }
+                    else { 	
+                        return JSON.parse(decodeURIComponent(document.cookie).replace('userAuth=',''));
+                    }
+                },
+                cook_com: function() {
+                    this.up;
+                    if(getCookie("Comanda") == "") {
+                        return "<<Error>>";
+                    }
+                    else { 	
+                        return getCookie("Comanda");
+                    }
+                }
+            }
+        });
+        var finishPaginas = new Vue({
+            el: "#finish",
+            data: {
+                comanda:{
+                    id:1,
+                    itens: {
+                        item:"Prato 1",
+                        preco:31.56,
+                        quantidade:2
+                    }
+                },
+                isCartao:'',
+                isDinheiro:'',
+                saldo: '',
+                valorPago:'',
+                insuficiente:''
+            },
+            methods: {
+                checkTerminar: function () {
+                    var saldo = this.saldo;
+                    if (saldo > this.valorPago) {
+                        this.insuficiente = true;
+                        return '';
+                    }
+                    else {
+                        this.insuficiente = false;
+                        return 'true';
+                    }
+                },
+                selCartao: async function () {
+                    this.isCartao = true;
+                    this.isDinheiro = false;
+                },
+                selDinheiro: async function () {
+                    this.isCartao = false;
+                    this.isDinheiro = true;
+                },
+                doDeletarComanda: async function() {
+                    var request = axios({
+                        "method": "delete",
+                        "url": "/comanda/"+getCookie("Comanda")
+                    });
+                    try {
+                        response = await request
+                        this.mensagem = response.data.resultado;
+                    }
+                    catch (error) {
+                        this.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções";
+                        return;
+                    }
+                },
+                doTerminarComanda: async function() {
+                    if(this.checkTerminar()){
+                        this.doDeletarComanda();
+                        window.location.replace("/page/conclusao", "Concluido", "_self");
+                    }
+                },
+                doTerminarComandaCartao: async function() {
+                    this.doDeletarComanda();
+                    window.location.replace("/page/conclusao", "Concluido", "_self");
+                },
+                doRetornarParaComandas: async function() {
+                    window.location.replace("/", "Sistema da Comanda", "_self");
+                },
+                calcularPreco: function() {
+                    let total = 0;
+                    for(var i=0;i<this.comanda.itens.length;i++){
+                        total = this.comanda.itens[i].preco * this.comanda.itens[i].quantidade + total;
+                    }
+                    this.saldo = total;
+                    return total;
+                }
+            },
+            beforeCreate: async function(){
+                console.log(this.comanda);
+                this.valorPago = '';
+                var request = axios({
+                    "method": "get",
+                    "url": "/comanda/" + getCookie("Comanda")});
+                try {
+                    comanda = await request
+                }
+                catch (error) {
+                    console.log(error);
+                    return;
+                }
+                this.comanda.id = 1;
+                this.comanda.itens = [{"item":"Prato","preco":"31.56","quantidade":2}];
+            }
+        });
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while(c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if(c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        var timerDT = setInterval(getDT, 1000);
+        function getDT() {
+            let today = new Date();
+            app.dia = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+            app.hora = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        };
+    </script>
+</html>

@@ -1,0 +1,78 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+    <link rel="stylesheet" href="../style.css">
+    <header>
+        <div id="tdc">
+            <h1>Concluido</h1>
+            <p>Data: [ {{ dia }} ]  Hora: [ {{ hora }} ]
+            <span>Nome: [ {{ cook_user.user }} ] Cargo: [ {{ cook_user.role }} ]  </span></p>
+        </div>
+    </header>
+    <body>
+        <div id="conclusao">
+            Pedido encerrado
+            <button id="quitConclusao" v-on:click="doRetonarComandas()">RETORNAR À JANELA PRINCIPAL</button>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        var app = new Vue({ // App vue que lida com o usuario logado e a hora (header)
+            el: '#tdc',
+            data: {
+                hora: '',
+                dia: ''
+            },
+            computed: {
+                cook_user: function() {
+                    this.up;
+                    if(getCookie("User") == "") {
+                        return {"user":"Não logado","role":"Nenhum"};
+                    }
+                    else { 	
+                        return JSON.parse(decodeURIComponent(document.cookie).replace('userAuth=',''));
+                    }
+                },
+                cook_com: function() {
+                    this.up;
+                    if(getCookie("Comanda") == "") {
+                        return "<<Error>>";
+                    }
+                    else { 	
+                        return getCookie("Comanda");
+                    }
+                }
+            }
+        });
+        var conclusao = new Vue({
+            el: "#conclusao",
+            data: {
+            },
+            methods: {
+                doRetonarComandas: async function() {
+                    window.location.replace("/", "Sistema da Comanda", "_self");
+                }
+            }
+        });
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while(c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if(c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        var timerDT = setInterval(getDT, 1000);
+        function getDT() {
+            let today = new Date();
+            app.dia = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+            app.hora = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        };
+    </script>
+</html>

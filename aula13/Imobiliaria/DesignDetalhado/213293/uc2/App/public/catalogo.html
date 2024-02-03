@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/vuelidate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/validators.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-router@3.5.3/dist/vue-router.min.js"></script>
+  
+
+  <head>
+    <link rel="stylesheet" href="css/style.css"></link>
+  </head>
+
+  <body>
+    <div class="container box signin-box">
+        <div id = "app">
+            <h2>Catálogo</h2>
+            <div class = "border">
+                <dl>
+                    <div class = "container">
+                        <div>
+                            <dt><b>Kitnet</b></dt>
+                            <dd>Endereço: Rua 2 num 100 bairro blablabla</dd>
+                            <dd>Tamanho: 40 m2</dd>
+                            <dd>Mobiliado: sim</dd>
+                            <dd>Disponibilidade: aluguel</dd>
+                            <dd>Preço: 600 por mês</dd>
+                        </div>
+                        <div>
+                            <button class="primary" id="BTN" >Detalhes</button>
+                        </div>
+                    </div>
+                    <div id="DETAILS" class="modal">
+                        <div class="modal-content">
+                            <div>
+                                <div>
+                                    <dt><b>Kitnet</b></dt>
+                                    <dd>Endereço: Rua 2 num 100 bairro blablabla</dd>
+                                    <dd>Tamanho: 40 m2</dd>
+                                    <dd>Mobiliado: sim</dd>
+                                    <dd>Disponibilidade: aluguel</dd>
+                                    <dd>Preço: 600 por mês</dd>
+                                </div>
+                                <div>
+                                    <img src="https://cdn.jornaldebrasilia.com.br/wp-content/uploads/2021/05/04124839/salaTV01.jpg" class="imagem">
+                                </div>
+                            </div>
+                            <div>
+                                <button class="primary" id="SBTN" >Solicitar</button>
+                                <button class="primary" id="ABTN" >Agendar visita</button>
+                                <button class="cancel-button" id="CBTN" >Cancel</button>
+                            </div>
+                            <div id="CONFIRM" class="modal">
+                                <div class="modal-content">
+                                    Solicitação confirmada
+                                    <button class="primary" id="OBTN">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </dl>
+                
+ 
+            
+            </div>
+        </div>
+    </div>
+  
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>        
+        var details = document.getElementById("DETAILS");
+        var confirm = document.getElementById("CONFIRM");
+        var btn = document.getElementById("BTN");
+        var cbtn = document.getElementById("CBTN");
+        var sbtn = document.getElementById("SBTN");
+        var abtn = document.getElementById("ABTN");
+        var obtn = document.getElementById("OBTN");
+
+        btn.onclick = function(){
+            details.style.display = "block"
+        }
+        sbtn.onclick = function(){
+            confirm.style.display = "block"
+        }
+        cbtn.onclick = function(){
+            details.style.display = "none"
+        }
+        abtn.onclick = function(){
+            
+        }
+        obtn.onclick = function(){
+            confirm.style.display = "none"
+            details.style.display = "none"
+        }
+
+        window.onclick = function(event) {
+            if (event.target == details) {
+                details.style.display = "none";
+            }
+            if (event.target == confirm) {
+                details.style.display = "none";
+                cofirm.style.display = "none";
+            }
+        }
+    </script> 
+
+
+    </body>
+</html>
+

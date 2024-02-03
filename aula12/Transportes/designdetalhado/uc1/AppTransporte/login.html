@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .link {
+            color: blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .link:hover {
+            color: violet;
+        }
+    </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+
+<body>
+
+    <h2>Autenticação de Usuários</h2>
+
+    <br>
+    <div id="app">
+        <form @submit.prevent="clear">
+            Usuário: <input type="text" v-model="nome"><br><br> Senha: <input type="password" v-model="senha"><br><br>
+            <button v-on:click="doPost()">Fazer login</button><br><br>
+            <button v-on:click="doCriar()">Criar conta</button><br><br>
+            <button v-on:click="doSenha()">Esqueci minha senha</button><br><br>
+        </form>
+        <b>Resultado:</b>&nbsp;{{ mensagem }}
+        <div v-if="sucesso == true"><a @click="closeWindow" class="link"> Clique aqui para fechar a janela </a></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                mensagem: ' ',
+                nome: '',
+                senha: '',
+                sucesso: false
+            },
+            methods: {
+                // LOGIN
+                doPost: async function() {
+                    var url = "/authentication";
+                    var data = {
+                        "nome": app.nome,
+                        "senha": app.senha
+                    };
+                    var request = axios({
+                        "method": "post",
+                        "url": url,
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "data": data
+                    });
+                    try {
+                        response = await request
+                        app.mensagem = response.data;
+                        app.sucesso = true;
+
+                    } catch (error) {
+                        app.mensagem = "Erro na autenticação";
+                        app.sucesso = false;
+                    }
+                },
+                doCriar: async function() { //criar conta
+                    window.open("/usuarios", "Criar conta Window", "height=300,width=400");
+                },
+                closeWindow: async function() { //fecha a janela
+                    window.close();
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

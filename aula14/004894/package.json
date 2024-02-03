@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "mongoose": "^6.0.7",
+    "vue-cookies": "^1.7.4"
+  }
+}

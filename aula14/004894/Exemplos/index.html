@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+<style type="text/css">
+  .tg  {border-collapse:collapse;border-spacing:0;}
+  .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg .tg-baqh{text-align:center;vertical-align:top}
+  .tg .tg-ahzk{background-color:#6665cd;color:#f8ff00;text-align:center;vertical-align:top}
+</style>
+<body>
+
+<h1>Cadastro de Alunos</h1>
+
+<br>
+
+<div id="app">
+  <form @submit.prevent="clear">
+    <button v-on:click="doLogin()">LOGIN</button>&nbsp;&nbsp;
+    <button v-on:click="doLogout()">LOGOUT</button><br><br>
+    RA: <input type="text" v-model="ra"><br><br>
+    Nome: <input type="text" v-model="nome"><br><br>
+    Curso: <input type="text" v-model="curso"><br><br>
+    <button v-on:click="acessa()">ACESSA</button> &nbsp;
+    <button v-on:click="insere()">INSERE</button> &nbsp;
+  </form>
+  <br><br>
+  <b>Resultado:</b> {{ mensagem }}
+  
+  
+  <table class="tg">
+    <thead v-if="alunos.length > 0">
+      <tr>
+          <th class="tg-ahzk"> RA </th>
+          <th class="tg-ahzk"> Nome </th>
+          <th class="tg-ahzk"> Curso </th>
+          <th class="tg-ahzk"> Operation </th>
+      </tr>
+    </thead>
+    <tbody v-if="alunos.length > 0">
+        <tr v-for="aluno in alunos">
+          <td class="tg-baqh"> {{ aluno.ra }} </td>
+          <td class="tg-baqh"> {{ aluno.nome }} </td>
+          <td class="tg-baqh"> {{ aluno.curso }} </td>
+          <td class="tg-baqh"><button v-on:click="atualiza(aluno.ra,aluno.nome,aluno.curso)">ATUALIZA</button> &nbsp;
+            <button v-on:click="remo(aluno.ra)">REMOVE</button></td>
+        </tr>
+    </tbody>
+  </table>
+  
+</div>
+
+<script type="text/x-template" id="tabletemplate">
+  <tr>
+      <td class="tg-baqh"> {{ ra }} </td>
+      <td class="tg-baqh"> {{ nome }} </td>
+      <td class="tg-baqh"> {{ curso }} </td>
+      <td class="tg-baqh">  </td>
+  </tr>
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: { 
+         payload: '',
+         codigo: '',
+         recurso: '/alunos',
+         repr: '{"ra": "123456", "nome": "Albert Einstein", "curso": "Fisica"}',
+         mensagem: '',
+         hra: '',
+         hnome: '',
+         hcurso: '',
+         alunos: '',
+         ra: '',
+         nome: '',
+         curso: ''
+    },
+    methods: {
+
+      // LOGIN
+    doLogin: async function() {
+       window.open("/authentication", "Login Window", "height=300,width=400");
+    },
+  
+    // LOGOUT
+    doLogout: async function() {
+       app.provideclear();
+       var request = axios({
+                   "method": "delete",
+                   "url": "/authentication"});
+       request.success(function(reply) {
+           app.mensagem = reply;
+       }
+     );
+    },
+
+    // ACESSA
+    acessa: async function() {
+     app.provideclear(); 
+     var url = "/alunos";
+     if (app.ra.length > 0) url = "/alunos/" + app.ra;
+     var request = axios({
+                 "method": "get",
+                 "url": url});
+      try {
+         response = await request
+         if(response.alunos != null) {
+            app.hra = "RA";
+            app.hnome = "Aluno";
+            app.hcurso = "Curso";
+            app.mensagem = response;
+            app.alunos = response.data.alunos;
+          } else {
+              //app.clear();
+              app.mensagem = response.data.resultado;
+              app.payload = response;
+              app.alunos = response.data.alunos;
+              //app.mensagem = response;
+          }         
+      } catch (error) {
+         app.mensagem = "Usuário não autenticado - Faça login primeiro"
+      }
+    },
+
+    // INSERE
+    insere: async function() {
+      app.provideclear();
+      if (app.ra == undefined || app.ra.length == 0 ||
+          app.nome == undefined || app.nome.length == 0 ||
+          app.curso == undefined || app.curso.length == 0) {
+             app.provideclear();
+             app.mensagem = "É necessário preencher todos os campos acima";
+             return;
+      }
+      var data = {"ra": app.ra,
+                  "nome": app.nome,
+                  "curso": app.curso};
+      var request = axios({
+                 "method": "post",
+                 "url": "/alunos",
+                 "data": data});
+      try {
+         response = await request
+         app.mensagem = response.data.resultado;
+         app.payload = response;
+      } catch (error) {
+        app.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções - Faça login com um usuário autorizado";
+      }
+    },
+
+    // ATUALIZA
+    atualiza: async function(ra,nome,curso) {
+      app.provideclear();
+      if ((app.nome == undefined || app.nome.length == 0) &&
+          (app.curso == undefined || app.curso.length == 0)) {
+            app.provideclear();
+            app.mensagem = "Preencha os campos Nome e Curso";
+            return;
+     }
+     if (app.nome == undefined || app.nome.length == 0) a_nome = nome;
+     else a_nome = app.nome;
+     if (app.curso == undefined || app.curso.length == 0) a_curso = curso;
+     else a_curso = app.curso;
+      var data = {"ra": ra,
+                 "nome": a_nome,
+                 "curso": a_curso};
+      var request = axios({
+                 "method": "put",
+                 "url": "/alunos/" + ra,
+                 "headers": { "Content-Type": "application/json" },
+                 "data": data});
+      try {
+        response = await request
+        app.mensagem = response.data.resultado;
+      } catch(error) {
+        app.mensagem = "O usuário autenticado não está autorizado a fazer modificações";
+      }
+  },
+
+  // REMOVE
+  remo: async function(ra) {
+     app.provideclear();
+     if (ra == undefined || ra.length == 0) {
+         app.provideclear();
+         app.mensagem = "preencha o RA do aluno";
+         return;
+     }
+     app.mensagem = ra;
+     var request = axios({
+                 "method": "delete",
+                 "url": "/alunos/" + ra});
+      try {
+        response = await request
+        app.mensagem = response.data.resultado;
+        app.payload = response;
+      } catch(error) {
+        app.mensagem = "O usuário autenticado não está autorizado a fazer modificações";
+      }
+   },
+
+  // CLEAR
+  provideclear: async function() {
+    app.alunos = [];
+    app.mensagem = "";
+    app.hra = app.hnome = app.hcurso = "";
+   }
+  }
+  } 
+  )
+  </script> 
+
+</body>
+</html>
+

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    
+    .tg td {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+    }
+    
+    .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+    }
+</style>
+
+<body>
+
+    <h1>Janela Principal</h1>
+
+    <br>
+
+    <div id="app">
+        <form @submit.prevent="clear">
+            <button v-on:click="doLogin()">LOGIN</button>&nbsp;&nbsp;
+            <button v-on:click="doLogout()">LOGOUT</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                payload: '',
+                codigo: '',
+                recurso: '/usuarios',
+                repr: '{}',
+                mensagem: '',
+                hnome: '',
+                hsenha: '',
+                hemail: '',
+                htelefone: '',
+                usuarios: '',
+                nome: '',
+                senha: '',
+                email: '',
+                telefone: ''
+            },
+            methods: {
+
+                // LOGIN
+                doLogin: async function() {
+                    window.open("/authentication", "Login Window", "height=300,width=400");
+                },
+
+                // LOGOUT
+                doLogout: async function() {
+                    app.provideclear();
+                    var request = axios({
+                        "method": "delete",
+                        "url": "/authentication"
+                    });
+                    request.success(function(reply) {
+                        app.mensagem = reply;
+                    });
+                },
+                // CLEAR
+                provideclear: async function() {
+                    app.usuarios = [];
+                    app.mensagem = "";
+                    app.hnome = app.hsenha = app.hemail = app.htelefone = "";
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

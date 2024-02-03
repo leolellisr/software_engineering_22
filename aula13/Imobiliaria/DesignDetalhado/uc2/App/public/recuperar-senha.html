@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/vuelidate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/validators.min.js"></script>
+
+  <head>
+    <link rel="stylesheet" href="css/style.css"></link>
+  </head>
+
+  <body>
+  <div class="container box change-password-box">
+    <div id = "app">
+      <h2>Alterar Senha</h2>
+      <div class = "border">
+        <div class = "aligned_inputs">
+          <input for="user" id="user" placeholder = "Usuário" v-model="formData.user" v-bind:class="{ invalid: $v.formData.user.$anyError }">
+          <input for="password" id="password" placeholder="Nova Senha" v-model="formData.password" type="password" v-bind:class="{ invalid: $v.formData.password.$anyError }">
+        </div>
+
+        <div class = "two_column container mt1">
+          <button class = "primary" v-on:click="onSubmit">Confirmar</button>
+          <button class = "secondary lb2" v-on:click="doCancel">Cancelar</button>
+        </div>
+
+        <h3 v-if="$v.$dirty && emptyFields" class="mt1 error">Um ou mais campos foram deixados em branco</h3>
+        <h3 v-if="$v.$dirty && errorSubmit" class="mt1 error">Usuário inexistente</h3>
+        <h3 v-if="$v.$dirty && errorFields" class="mt1 error">Senha muito curta</h3>
+      </div>
+
+      <div class = "links">
+            <div class="signup_link">
+                    <a href="/">Voltar para página Inicial</a>
+            </div>
+        </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+  <script>
+    Vue.use(window.vuelidate.default);
+
+    const alphaAndSpace = validators.helpers.regex('alphaAndSpace', /^[a-z\s]*$/i);
+
+    var app = new Vue({
+      el: '#app',
+      data: { 
+        emptyFields: false,
+        errorSubmit: false,
+        errorFields: false,
+        formData: {
+          user: null,
+          password: null,
+        }
+      },
+
+      validations: {
+        formData: {
+          user: {
+            required: validators.required
+          },
+          password: {
+            required: validators.required,
+            minLength: validators.minLength(4)
+          }
+        }
+      },
+
+      methods: {
+
+        onSubmit: async function (event) {
+          app.emptyFields = false;
+          app.errorFields = false;
+          this.errorSubmit = false;
+
+          this.$v.$touch();
+
+          app.emptyFields = Object.values(this.$v.formData).some(o => o.required === false);
+          console.log(this.$v);
+
+          app.errorFields = !app.emptyFields && this.$v.$error;
+
+          if (this.$v.$error) {
+            return;
+          }
+
+          const response = await this.doPut();
+          console.log(response);
+          if (response === 200) {
+            window.location.href = "login";
+          } else {
+            this.errorSubmit = true;
+          }
+        },
+
+        doPut: async function () {
+          var url = "/user/" + app.formData.user;
+          var data = app.formData;
+          var request = axios({
+            "method": "put",
+            "url": url,
+            "headers": { "Content-Type": "application/json" },
+            "data": data});
+          try {
+            return (await request).status;
+          } catch (error) {
+            return error.response.status;
+          }
+        },
+        
+        doCancel: async function () {
+            window.location.href = "login";
+        },
+      }
+    }
+    )
+
+  </script> 
+
+
+  </body>
+</html>
+

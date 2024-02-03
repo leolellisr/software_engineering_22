@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/vuelidate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuelidate@0.7.4/dist/validators.min.js"></script>
+
+<head>
+    <link rel="stylesheet" href="css/style.css">
+    </link>
+</head>
+
+<body>
+    <div class="container box cadastro-box">
+        <div id="app">
+            <h2>Cadastrar imóvel</h2>
+
+            <div class="border">
+                <div class="two_column">
+                    <div class="aligned_inputs">
+                        <div>
+                            <label for="adress" v-bind:class="{ invalid: $v.formData.adress.$anyError }">Endereço:</label>
+                            <input id="adress" placeholder="Rua Juca 123" v-model="formData.adress" v-bind:class="{ invalid: $v.formData.adress.$anyError }">
+                        </div>
+                        <div>
+                            <label for="size" v-bind:class="{ invalid: $v.formData.size.$anyError }">Tamanho:</label>
+                            <input id="size" placeholder="40" v-model="formData.size" v-bind:class="{ invalid: $v.formData.size.$anyError }">
+                        </div>
+                        <div>
+                            <label class='inline-block' for="furnished" v-bind:class="{ invalid: $v.formData.furnished.$anyError }">Mobiliado:</label>
+                            <input class='inline-block' type="checkbox" id="furnished" v-model="formData.furnished" v-bind:class="{ invalid: $v.formData.furnished.$anyError } ">
+                        </div>
+                        <div>
+                            <label for="price" v-bind:class="{ invalid: $v.formData.price.$anyError } ">Preço Incial:</label>
+                            <input id="price" placeholder="Somente números" v-model="formData.price" v-bind:class="{ invalid: $v.formData.price.$anyError } ">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two_column container mt1 ">
+                    <button class="primary" v-on:click="onSubmit ">Confirmar</button>
+                    <form action="/">
+                        <button class="cancel-button" type="submit" action="/">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+
+            <h3 v-if="$v.$dirty && emptyFields " class="mt1 error ">Um ou mais campos foram deixados em branco</h3>
+            <h3 v-if="$v.$dirty && errorFields " class="mt1 error ">Um ou mais campos são inválidos</h3>
+            <h3 v-if="$v.$dirty && errorSubmit " class="mt1 error ">Imóvel já cadastrado</h3>
+
+        </div>
+    </div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js "></script>
+<script>
+    Vue.use(window.vuelidate.default);
+
+
+    var app = new Vue({
+        el: '#app ',
+        data: {
+            emptyFields: false,
+            errorFields: false,
+            errorSubmit: false,
+            formData: {
+                adress: null,
+                size: null,
+                furnished: false,
+                price: null,
+            }
+        },
+
+        validations: {
+            formData: {
+                adress: {
+                    required: validators.required,
+                    minLength: validators.minLength(4),
+                },
+                size: {
+                    required: validators.required,
+                    minValue: validators.minValue(20)
+                },
+                furnished: {
+                    required: validators.required
+                },
+                price: {
+                    required: validators.required,
+                    between: validators.between(0, 99999999999)
+                }
+            }
+        },
+
+        methods: {
+
+            onSubmit: async function(event) {
+                app.emptyFields = false;
+                app.errorFields = false;
+                this.errorSubmit = false;
+
+                this.$v.$touch();
+
+                app.emptyFields = Object.values(this.$v.formData).some(o => o.required === false);
+                console.log(this.$v);
+
+                app.errorFields = !app.emptyFields && this.$v.$error;
+
+                if (this.$v.$error) {
+                    return;
+                }
+
+                const response = await this.doPost();
+                console.log(response);
+                if (response === 200) {
+                    window.location.href = "login ";
+                } else {
+                    this.errorSubmit = true;
+                }
+            },
+
+            doPost: async function() {
+                var url = "/catalog ";
+                var data = app.formData;
+                var request = axios({
+                    "method ": "post ",
+                    "url ": url,
+                    "headers ": {
+                        "Content-Type ": "application/json "
+                    },
+                    "data ": data
+                });
+                try {
+                    return (await request).status;
+                } catch (error) {
+                    return error.response.status;
+                }
+            },
+        }
+    })
+</script>
+
+
+</body>
+
+</html>

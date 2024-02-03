@@ -1,0 +1,20 @@
+mytest.spec.js
+Descrição: faz a visita da página principal e testa um login de um usuário válido.
+
+wrong_login.spec.js
+Descrição: faz a visita da página principal e testa um login de usuário inválido.
+
+not_authorized_access
+Descrição: tenta acessar a lista de alunos sem ter se autenticado antes.
+
+insert_aluno
+Descrição: faz o login com um usuário válido e cadastra um novo aluno.
+
+atualiza
+Descrição: atualiza o curso de um aluno já cadastrado.
+
+cadastrar_usr.spec.js
+Descrição: cadastrar um novo usuário com papel de 'admin'.
+
+wrong_cadastrar_usr.spec.js
+Descrição: tenta cadastrar um usuário já existente.

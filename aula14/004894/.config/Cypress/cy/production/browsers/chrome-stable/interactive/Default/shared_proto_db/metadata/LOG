@@ -1,0 +1,2 @@
+2021/11/19-18:37:23.148 220 Creating DB /home/node/.config/Cypress/cy/production/browsers/chrome-stable/interactive/Default/shared_proto_db/metadata since it was missing.
+2021/11/19-18:37:23.167 220 Reusing MANIFEST /home/node/.config/Cypress/cy/production/browsers/chrome-stable/interactive/Default/shared_proto_db/metadata/MANIFEST-000001

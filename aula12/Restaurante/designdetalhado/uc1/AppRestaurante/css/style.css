@@ -1,0 +1,53 @@
+.container{
+    display: grid;
+    grid-template-rows: 210px 120px 300px;
+    grid-template-columns: auto;
+    grid-auto-flow: row;
+    align-content: center;
+    grid-template-areas:
+        "Pedido"
+        "Consulta";
+        
+}
+
+.Consulta { grid-area: Consulta;
+    font-family: 'Courier New';
+    background-color: rgb(121, 173, 245);
+    text-align: center;
+  }
+.Pedido { grid-area: Pedido;
+    font-family: 'Courier New';
+    background-color: rgb(121, 173, 245);
+    text-align: center;
+}
+.tableFixHead, .tableFixHead td{
+  box-shadow: inset 1px -1px #000;
+}
+.centro{
+  margin: 0 auto;
+}
+
+#data { border-collapse: collapse;
+font-family: Arial;
+}
+
+#data td, #data th{
+  border: 1px solid hsla(215, 50%, 23%, 1);
+  padding: 8px;
+}
+
+#data tr:nth-child(even){
+     background-color: #f2f2f2;
+  }
+
+  #data tr:hover {
+    background-color:#ddd;
+}
+
+#data th{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: hsla(215, 50%, 23%, 1);
+  color: white;
+}

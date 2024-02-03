@@ -1,0 +1,139 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+    <style>
+        header {
+            background-color:hsla(215, 50%, 23%, 1);
+            border-style: solid;
+            border-width: 5px;
+            color: hsla(215, 50%, 23%, 1);
+            font-family: 'Calibri';
+        }
+        h1 {
+            color: hsla(105, 55%, 96%, 1);
+            text-align: center;
+        }
+        p {
+            color: hsla(105, 55%, 96%, 1);
+            text-align: right;
+        }
+        span {
+            color: hsla(105, 55%, 96%, 1);
+            float: left;
+        }
+        body {
+            background-color:hsla(182, 43%, 76%, 1);
+            font-family:'Georgia'; 
+        }
+        #add {
+            background-color: hsla(105, 55%, 96%, 1);
+            width: 46.5%;
+            height: 68%;
+            padding: 10px;
+            border: 3px solid hsla(105, 55%, 96%, 1);
+            margin: 0;
+            right: 0.65%;
+            bottom: 2%;
+            position: absolute;
+        }
+        #resp {
+            text-align: left;
+            color:hsla(215, 50%, 23%, 1);
+        }
+        #list {
+            background-color: hsla(105, 55%, 96%, 1);
+            height: 61%;
+            width: 46.5%;
+            padding: 10px;
+            border: 3px solid hsla(105, 55%, 96%, 1);
+            margin: 0;
+            left: 0.65%;
+            bottom: 9%;
+            position: absolute;
+        }
+        #quit {
+            position: absolute;
+            left: 15%;
+            bottom: 3%;
+            background: hsla(215, 50%, 23%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+    </style>
+    <header>
+        <div id="tdc">
+            <h1>Garçom: Edição da Comanda {{ cook_com }}</h1>
+            <p>
+                Data: [ {{ dia }} ]  Hora: [ {{ hora }} ]
+                <span> Nome: [ {{ cook_user.user }} ] Cargo: [ {{ cook_user.role }} ]  </span>
+            </p>
+        </div>
+    </header>
+    <body>
+        <button id="quit" v-on:click="doEntraGarMain()">RETORNAR À JANELA PRINCIPAL</button>
+        <div id="add">
+
+        </div>
+        <div id="list">
+
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while(c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if(c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        var app = new Vue({
+            el: '#tdc',
+            data: {
+                hora: '',
+                dia: ''
+            },
+            computed: {
+                cook_user: function() {
+                    this.up;
+                    if(getCookie("User") == "") {
+                        return {"user":"Não logado","role":"Nenhum"};
+                    }
+                    else { 	
+                        return JSON.parse(decodeURIComponent(document.cookie).replace('userAuth=',''));
+                    }
+                },
+                cook_com: function() {
+                    this.up;
+                    if(getCookie("Comanda") == "") {
+                        return "<<Error>>";
+                    }
+                    else { 	
+                        return getCookie("Comanda");
+                    }
+                }
+            }
+        });
+        var app4 = new Vue({
+            el: "#quit",
+            methods: {
+                doEntraGarMain: async function() {
+                    window.location.replace("/page/gar-main", "Garçom Main", "_self");
+                }
+            }
+        });
+        var timerDT = setInterval(getDT, 1000);
+        function getDT() {
+            let today = new Date();
+            app.dia = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+            app.hora = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        };
+        app3.doList();
+    </script>
+</html>

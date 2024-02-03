@@ -1,0 +1,192 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+    <link rel="stylesheet" href="./style.css">
+    <header>
+        <div id="tdc">
+            <h1>Sistema do Atendente</h1>
+            <p>Data: [ {{ dia }} ]  Hora: [ {{ hora }} ]
+            <span>Nome: [ {{ cook_user.user }} ] Cargo: [ {{ cook_user.role }} ]  </span></p>
+        </div>
+    </header>
+    <body>
+        <br>&nbsp;<button v-on:click="">Retornar</button>
+        <div id="list">
+            <h2>Lista de Comandas</h2><br>
+            <button id="sel" v-on:click="doPostComanda()">Nova Comanda</button><br><br>
+            <template v-if="comandas">
+                <li v-for="item of comandas" v-bind:key="item.length">
+                    <td class="tg-baqh"></td>Comanda {{item.id}}</td><td class="tg-baqh"></td>
+                    <button id="sel" @click="doTerminarComanda(item.id)">Revisão</button><br><br>
+                </li>
+            </template>
+        </div>
+         <div id="add" v-if="select"> 
+            <h2>Comanda {{comandaListada.id}}</h2><br>
+            <template v-if="comandaListada.itens">
+                <div class="table">
+                    <table class="tg">
+                        <thead class="tg-head">
+                        <tr>
+                            <th class="tg-ahzk"> Item </th>
+                            <th class="tg-ahzk"> Preço </th>
+                            <th class="tg-ahzk"> Quantidade </th>
+                        </tr>
+                        </thead>
+                        <template v-for="item in comandaListada.itens">
+                            <tbody class="tg-body">
+                                <td class="tg-baqh"> {{ item.item }} </td>
+                                <td class="tg-baqh"> R$ {{ item.preco }} </td>
+                                <td class="tg-baqh"> {{ item.quantidade }} </td>
+                            </tbody> 
+                        </template>
+                    </table>
+                </div>
+            </template>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        var app = new Vue({ // App vue que lida com o usuario logado e a hora (header)
+            el: '#tdc',
+            data: {
+                hora: '',
+                dia: ''
+            },
+            computed: {
+                cook_user: function() {
+                    this.up;
+                    if(getCookie("User") == "") {
+                        return {"user":"Não logado","role":"Nenhum"};
+                    }
+                    else { 	
+                        return JSON.parse(decodeURIComponent(document.cookie).replace('userAuth=',''));
+                    }
+                },
+                cook_com: function() {
+                    this.up;
+                    if(getCookie("Comanda") == "") {
+                        return "<<Error>>";
+                    }
+                    else { 	
+                        return getCookie("Comanda");
+                    }
+                }
+            },
+            method: {
+
+            }
+        });
+        var app2 = new Vue({
+            el: "#add",
+            data: {
+                select: '',
+                quant: '',
+                mensagem: ''
+            },
+            methods: {
+            }
+        });
+        var app3 = new Vue({
+            el: "#list",
+            data: {
+                mensagem:'',
+                comandas: '',
+                comandaListada:''
+            },
+            methods: {
+                doTerminarComanda: async function(id) {
+                    //console.log("pre finish");
+                    setCookie("Comanda", id, 2, 'page/finish');
+                    window.location.replace("/page/finish", "Finish", "_self");
+                },
+                doGoToComanda: async function(id) {
+                    setCookie("Comanda", id, 2, 'page/comandas');
+                    window.location.replace("/page/comandas", "Pagina da Comanda", "_self");
+                },
+                getComandas: async function() {
+                    var request = axios({
+                    "method": "get",
+                    "url": "/comanda"});
+                    try {
+                        comandas = await request
+                    }
+                    catch (error) {
+                        console.log(error);
+                        return;
+                    }
+                    this.comandas = comandas.data.comandas;
+                    //this.comandas = comandas.filter((element) => element.prato == "bebida");
+                },
+                doPostComanda: async function() {
+                    var data = {};
+                    var request = axios({
+                        "method": "post",
+                        "url": "/comanda",
+                        "data": data
+                    });
+                    try {
+                        response = await request
+                        this.mensagem = response.data.resultado;
+                    }
+                    catch (error) {
+                        this.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções";
+                        return;
+                    }
+                    this.getComandas();
+                },
+                doDeletarComanda: async function(id) {
+                    var request = axios({
+                        "method": "delete",
+                        "url": "/comanda/"+id
+                    });
+                    try {
+                        response = await request
+                        this.mensagem = response.data.resultado;
+                    }
+                    catch (error) {
+                        this.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções";
+                        return;
+                    }
+                    app2.select = '';
+                    this.getComandas();
+                },
+                doListarComanda: async function(id) {
+                    app2.select = '';
+                    app2.comandaListada = this.comandas.find(element => element.id == id);
+                    app2.select = 'true';
+                }
+            },
+            beforeMount(){
+                this.getComandas();
+            }
+        });
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while(c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if(c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        function setCookie(cname, cvalue, exdays, path) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            let expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/" + path + ";";
+        }
+        var timerDT = setInterval(getDT, 1000);
+        function getDT() {
+            let today = new Date();
+            app.dia = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+            app.hora = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        };
+    </script> 
+    
+</html>

@@ -1,0 +1,28 @@
+use usuarioDB
+db.usuarios.insertOne({usuario:M, papel:A, password:C})
+use usuarioDB
+db.usuarios.insertOne({usuario:Diana, papel:admin, password:maravilha})
+use usuarioDB
+db.usuarios.insertOne({"usuario":"Lanterna", "papel":"admin", "password":"verde"})
+use usuarioDB
+db.usuarios.insertOne({"usuario":"Lanterna", "papel":"admin", "password":"verde"})
+use usuarioDB
+db.usuarios.insertOne({"usuario":"Thor", "papel":"admin", "password":"asgard"})
+use usuarioDB
+db.usuarios.insertOne({"usuario":"Capitao", "papel":"admin", "password":"america"})
+use usuarioDB
+db.usuarios.insertOne({"usuario":"Tony", "papel":"admin", "password":"stark"})
+use usuariosDB
+db.usuarios.find().pretty()
+db.usuarios.insertOne({"usuario":"Berre", "papel":"admin", "password":"flash"})
+db.usuarios.find().pretty()
+use usuarioDB
+db.usuarios.insertOne({"usuario":"Tone", "papel":"admin", "password":"ferro"})
+show dbs
+use usuariosDB
+show collections
+db.usuarios.find().pretty()
+use usuarioDB
+db.usuarios.find().pretty()
+use usuariosDB
+db.usuarios.insertOne({"usuario":"root", "papel":"admin", "password":"campinas"})

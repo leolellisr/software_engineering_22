@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+
+<head>
+    <title>Delivery 6</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="Octavio Salim Moreira">
+</head>
+
+<style type="text/css">
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+/* Configuração da tabela */
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding: 8px;
+    background-color: lightsteelblue;
+}
+
+th {
+    padding: 8px;
+    background-color: steelblue;
+    color: white;
+}
+
+</style>
+
+<div id="app">
+
+  <form @submit.prevent="clear">
+    <h2>Inserção e Update de Alunos</h2>
+    <br>
+    RA:    <input type="text" name = "ra" v-model = "students.ra">
+    Nome:  <input type="text" name = "nome" v-model = "students.nome">
+    Curso: <input type="text" name = "curso" v-model = "students.curso">
+    <button v-on:click="doPost()">Insert</button> &nbsp;
+    <button v-on:click="doPut()">Update</button> &nbsp;
+    <br><br>
+    <hr>
+    <h2>Consulta e Deleção de Alunos</h2>
+    <br>
+    RA:    <input type="text" v-model = "raConsulta">
+    <button v-on:click="doGet()">Get</button> &nbsp;
+    <button v-on:click="doDelete()">Delete</button> &nbsp;
+    <br><br>
+    <hr>
+  </form>
+  
+<h2>Resultado</h2>
+
+<table id="result-table">
+    <tr>
+        <th> RA </th>
+        <th> Nome </th>
+        <th> Curso </th>
+    </tr>
+    <tr v-for = "aluno in payload.alunos">
+        <td>{{aluno.ra}}</td>
+        <td>{{aluno.nome}}</td>
+        <td>{{aluno.curso}}</td>
+    </tr>
+</table>
+
+{{ payload.resultado }}
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: { 
+         payload: '',
+         codigo: '',
+         recurso: '/alunos/',
+         students:{
+            ra: '',
+            nome: '',
+            curso: '',
+         },
+         raConsulta:''  
+    },
+
+    methods: {
+    
+    // GET 
+    doGet: async function () {
+       var url = app.recurso + app.raConsulta;
+       var data = app.raConsulta;
+       var request = axios({"method": "get","url": url});
+       try {
+         response = await request
+       } catch (error) {
+         response = {"data": { "resultado": " URL inválida" }, "status": 404, "statusText": "Error"}
+       } 
+       app.payload = response.data
+       app.codigo = response.status + " "+ response.statusText
+
+       app.students.ra = response.data.alunos[0].ra;
+       app.students.nome = response.data.alunos[0].nome;
+       app.students.curso = response.data.alunos[0].curso;
+
+    },
+  
+    // POST
+    doPost: async function () {
+       var url = app.recurso;
+       var data = app.students;
+       var request = axios({
+                   "method": "post",
+                   "url": url,
+                   "headers": { "Content-Type": "application/json" },
+                   "data": data});
+        try {
+         response = await request
+       } catch (error) {
+         response = response = {"data": { "resultado": " URL inválida" }, "status": 404, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText        
+    },
+  
+    // PUT
+    doPut: async function() {
+       var url = app.recurso + app.students.ra;
+       var data = app.students;
+       var request = axios({
+                   "method": "put",
+                   "url": url,
+		   "headers": { "Content-Type": "application/json" },		   
+                   "data": data});
+        try {
+        response = await request
+       } catch (error) {
+         response = {"data": { "resultado": " URL inválida"  }, "status": 400, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText
+    },
+  
+    // DELETE
+    doDelete: async function() {
+       var url = app.recurso + app.raConsulta;
+       var request = axios({
+                   "method": "delete",
+                   "url": url});
+        try {
+        response = await request
+       } catch (error) {
+         response = {"data": { "resultado": " URL inválida" }, "status": 404, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText            
+     },
+  
+    // CLEAR
+    doClear: async function() {
+      app.codigo = "";
+      app.payload = "";
+      app.raConsulta = "";
+      app.students = "";
+      }
+    }
+   }
+  )
+
+</script> 
+
+
+</body>
+</html>
+

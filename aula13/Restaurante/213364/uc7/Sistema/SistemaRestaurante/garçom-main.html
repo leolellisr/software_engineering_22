@@ -1,0 +1,311 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+    <style>
+        header {
+            background-color:hsla(215, 50%, 23%, 1);
+            border-style: solid;
+            border-width: 5px;
+            color: hsla(215, 50%, 23%, 1);
+            font-family: 'Calibri';
+        }
+        h1 {
+            color: hsla(105, 55%, 96%, 1);
+            text-align: center;
+        }
+        p {
+            color: hsla(105, 55%, 96%, 1);
+            text-align: right;
+        }
+        span {
+            color: hsla(105, 55%, 96%, 1);
+            float: left;
+        }
+        #comanda {
+            background-color: hsla(105, 55%, 96%, 1);
+            width: 46.5%;
+            height: 30%;
+            padding: 10px;
+            border: 3px solid hsla(105, 55%, 96%, 1);
+            margin: 0;
+            right: 0.65%;
+            bottom: 2%;
+            position: absolute;
+        }
+        #pedido {
+            background-color: hsla(105, 55%, 96%, 1);
+            width: 46.5%;
+            height: 30%;
+            padding: 10px;
+            border: 3px solid hsla(105, 55%, 96%, 1);
+            margin: 0;
+            right: 0.65%;
+            bottom: 40%;
+            position: absolute;
+        }
+        #listas {
+            background-color: hsla(105, 55%, 96%, 1);
+            height: 61%;
+            width: 46.5%;
+            padding: 10px;
+            border: 3px solid hsla(105, 55%, 96%, 1);
+            margin: 0;
+            left: 0.65%;
+            bottom: 9%;
+            position: absolute;
+        }
+        #mesa {
+            background: hsla(203, 39%, 44%, 1);
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+            color: hsla(105, 55%, 96%, 1);;
+            text-align: center;
+        }
+        #mesaLabel {
+            color: hsla(215, 50%, 23%, 1);
+            display: block;
+            text-align: center;
+        }
+        #CC {
+            position: absolute;
+            left: 35%;
+            background: hsla(203, 39%, 44%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        #LC {
+            position: absolute;
+            left: 37%;
+            background: hsla(203, 39%, 44%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        body {
+            background-color:hsla(182, 43%, 76%, 1);
+            font-family:'Georgia'; 
+        }
+        #quit {
+            position: absolute;
+            left: 15%;
+            bottom: 3%;
+            background: hsla(215, 50%, 23%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+        .Tabela {
+            overflow-y: auto;
+            height: 90%;
+        }
+        .Tabela .tg-head .tg-ahzk {
+            position: sticky;
+            top: 0;
+        }
+        .tg {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .tg-baqh {
+            padding: 8px 16px;
+            border: 1px solid black;
+            color: hsla(215, 50%, 23%, 1);
+            text-align: center;
+        }
+        .tg-ahzk {
+            background: hsla(215, 50%, 23%, 1);
+            color : hsla(105, 55%, 96%, 1);
+            padding: 8px 16px;
+            border: 1px solid black;
+        }
+        #beb, #prat, #sobre {
+            background: hsla(203, 39%, 44%, 1);
+            color : hsla(105, 55%, 96%, 1);
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+        #beb {
+            margin-left: 70px;
+        }
+        #resp {
+            text-align: left;
+            color:hsla(215, 50%, 23%, 1);
+        }
+        #but {
+            background: hsla(203, 39%, 44%, 1);
+            color: hsla(105, 55%, 96%, 1);
+        }
+    </style>
+    <header>
+        <div id="tdc">
+            <h1>Sistema do Garçom</h1>
+            <p>
+                Data: [ {{ dia }} ]  Hora: [ {{ hora }} ]
+                <span>Nome: [ {{ cook.user }} ] Cargo: [ {{ cook.role }} ]  </span>
+            </p>
+        </div>
+    </header>
+    <body>
+        <button id="quit" v-on:click="doEntraMain()">RETORNAR À JANELA PRINCIPAL</button>
+        <div id="listas">
+            <button id="LC" v-on:click="doList()">LISTAR COMANDAS</button><br><br>
+            <div class="Tabela">
+                <table class="tg">
+                    <thead class="tg-head" v-if="comanda.length >= 0">
+                    <tr>
+                        <th class="tg-ahzk"> Comanda </th>
+                        <th class="tg-ahzk"> Preço Total </th>
+                        <th class="tg-ahzk"> Preço Pago </th>
+                        <th class="tg-ahzk"> Operação </th>
+                    </tr>
+                    </thead>
+                    <tbody class="tg-body" v-if="comanda.length > 0">
+                        <tr v-for="item in comanda">
+                        <td class="tg-baqh"> {{ item.id }} </td>
+                        <td class="tg-baqh"> R$ {{ item.preco_total }} </td>
+                        <td class="tg-baqh"> R$ {{ item.preco_pago }} </td>
+                        <td class="tg-baqh"><button id="but" v-on:click="doEntraComEdit(item.id)">EDITAR COMANDA</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="pedido">
+            
+        </div>
+        <div id="comanda">
+            <br>
+            <label id="mesaLabel" for="Mesa"> Inserir o Número da Mesa ou Comanda: </label><br>
+            <input type="number" v-model="id" id="Mesa" value="" maxlenght="2"> <br><br>
+            <button id="CC" v-on:click="doCriaComanda()">GERAR NOVA COMADA</button><br><br>
+            <p id="resp">Resposta do Sistema: {{ mensagem }} </p>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        function setCookie(cname, cvalue, exdays, path) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            let expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/" + path;
+        }
+        var app = new Vue({
+            el: '#comanda',
+            data: { 
+                mensagem: '',
+                id: ''
+            },
+            methods: {
+                doCriaComanda: async function() {
+                    if(app.id == undefined || app.id.length == 0) {
+                        app.mensagem = "É necessário preencher o campo de informção acima";
+                        return;
+                    }
+                    var data = {"id": app.id};
+                    var request = axios({
+                        "method": "post",
+                        "url": "/comanda",
+                        "data": data
+                    });
+                    try {
+                        response = await request
+                        app.mensagem = response.data.resultado;
+                        if(app.mensagem == "Comanda ja existente") {
+                            this.doClear();
+                        }
+                    }
+                    catch (error) {
+                        app.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções";
+                        return;
+                    }
+                    if((app.mensagem != "Falha de acesso ao BD") && (app.mensagem != "Comanda ja existente")) {
+                        setCookie("Comanda", app.id, 2, 'page/com-edit');
+                        window.location.replace("/page/com-edit", "Editar Comanda", "_self");
+                    }
+                },
+                doClear: async function() {
+                    app.id = '';
+                }
+            }
+        });
+        var app2 = new Vue({
+            el: '#tdc',
+            data: {
+                hora: '',
+                dia: ''
+            },
+            computed: {
+                cook: function() {
+                    this.up;
+                    if(document.cookie == '') {
+                        return {"user":"Não logado","role":"Nenhum"};
+                    }
+                    else { 	
+                        return JSON.parse(decodeURIComponent(document.cookie).replace('userAuth=',''));
+                    }
+                }
+            }
+        });
+        var app3 = new Vue({
+            el: '#quit',
+            methods: {
+                doEntraMain: async function() {
+                    window.location.replace("/page/main", "Sistema Main", "_self");
+                }
+            }
+        });
+        var app4 = new Vue({
+            el: '#listas',
+            data: { 
+                comanda: ''
+            },
+            methods: {
+                doList: async function() {
+                    var request = axios({
+                        "method": "get",
+                        "url": "/comanda",
+                        "data": ""
+                    });
+                    try {
+                        response = await request
+                        this.comanda = response.data.comandas;
+                    }
+                    catch (error) {
+                        app.mensagem = "Usuário não autenticado ou sem autorização para efetuar verificações";
+                        return;
+                    }
+                },
+                doEntraComEdit: async function(ident) {
+                    var request = axios({
+                        "method": "get",
+                        "url": "/comanda/" + ident
+                    });
+                    try {
+                        response = await request
+                        app.mensagem = response.data.resultado;
+                    }
+                    catch (error) {
+                        app.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções";
+                        return;
+                    }
+                    if(response.data.resultado == "Comanda válida") {
+                        setCookie("Comanda", ident, 2, 'page/com-edit');
+                        window.location.replace("/page/com-edit", "Editar Comanda", "_self");
+                    }
+                }
+            }
+        });
+        var app5 = new Vue({
+            el: "#quit",
+            methods: {
+                doEntraGarMain: async function() {
+                    window.location.replace("/page/gar-main", "Garçom Main", "_self");
+                }
+            }
+        });
+        var timerDT = setInterval(getDT, 1000);
+        function getDT() {
+
+            let today = new Date();
+            app2.dia = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+            app2.hora = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+        };
+        app4.doList();
+    </script>
+</html>

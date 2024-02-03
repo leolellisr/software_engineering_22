@@ -1,0 +1,146 @@
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+    <link rel="stylesheet" href="style.css">
+    <header>
+        <div id="tdc">
+            <h1>Pagina da Comanda {{ cook_com }}</h1>
+            <p >Data: [ {{ dia }} ]  Hora: [ {{ hora }} ]
+            <span>Nome: [ {{ cook_user.user }} ] Cargo: [ {{ cook_user.role }} ]  </span></p>
+        </div>
+    </header>
+    <body>
+        <button id="quit" v-on:click="doEntraGarMain()">RETORNAR À JANELA PRINCIPAL</button>
+        <div id="add">
+            <button id="beb" v-on:click="select = 'bebidas'">BEBIDAS</button>
+            <button id="prat" v-on:click="select = 'pratos'">PRATOS</button>
+            <button id="sobre" v-on:click="select = 'sobremesa'">SOBREMESA</button>
+            <p>{{ select }}</p>
+        </div>
+        <div id="list">
+            <div class="table">
+                <table class="tg">
+                    <thead class="tg-head" v-if="itens.length > 0">
+                    <tr>
+                        <th class="tg-ahzk"> Item </th>
+                        <th class="tg-ahzk"> Preço </th>
+                        <th class="tg-ahzk"> Quantidade </th>
+                        <th class="tg-ahzk"> Operação </th>
+                    </tr>
+                    </thead>
+                    <tbody class="tg-body" v-if="itens.length > 0">
+                        <tr v-for="item in itens">
+                        <td class="tg-baqh"> {{ item.nome }} </td>
+                        <td class="tg-baqh"> R$ {{ item.preco }} </td>
+                        <td class="tg-baqh"> {{ item.quant }} </td>
+                        <td class="tg-baqh"><button id="but" v-on:click="remo(aluno.ra)">REMOVER UNIDADE</button> 
+                        <button id="but" v-on:click="remo(aluno.ra)">REMOVER</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button id="quit" v-on:click="doFinish()">FINALIZAR</button>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+    <script>
+        var app = new Vue({ // App vue que lida com o usuario logado e a hora (header)
+            el: '#tdc',
+            data: {
+                hora: '',
+                dia: ''
+            },
+            computed: {
+                cook_user: function() {
+                    this.up;
+                    if(getCookie("User") == "") {
+                        return {"user":"Não logado","role":"Nenhum"};
+                    }
+                    else { 	
+                        return JSON.parse(decodeURIComponent(document.cookie).replace('userAuth=',''));
+                    }
+                },
+                cook_com: function() {
+                    this.up;
+                    if(getCookie("Comanda") == "") {
+                        return "<<Error>>";
+                    }
+                    else { 	
+                        return getCookie("Comanda");
+                    }
+                }
+            }
+        });
+        var app2 = new Vue({  //App vue que lida com adicionar
+            el: "#add",
+            data: {
+                select: 'none',
+                quant: '',
+                mensagem: ''
+            },
+            methods: {
+                doAddItem: async function() {
+                    if(app2.item == undefined || app2.item.length == 0 || app2.item_preco == undefined || app2.item_preco.length == 0 || app2.quant == undefined || app2.quant.length == 0) {
+                        app.mensagem = "É necessário preencher o campo de informção acima";
+                        return;
+                    }
+                    var data = {"nome": app2.item, "preco": app2.item_preco, "quant": app2.quant};
+                    var request = axios({
+                    "method": "post",
+                    "url": "/comanda/" + getCookie("Comanda"),
+                    "data": data});
+                    try {
+                        response = await request
+                        app.mensagem = response.data.resultado;
+                    }
+                    catch (error) {
+                        app.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções";
+                        return;
+                    }
+                },
+                doModItem: async function() {
+
+                }
+            }
+        });
+        var app3 = new Vue({ //App que lida com a lista dos itens
+            el: "#list",
+            data: {
+                itens: [{"nome":"Coca","preco":"4,50","quant":"2"}, {"nome":"Prato","preco":"31,56","quant":"1"}]
+            },
+            methods: {
+                doFinish: async function() {
+                    window.location.href = "finish.html";
+                }
+            }
+        });
+        var app4 = new Vue({
+            el: "#quit",
+            methods: {
+                doEntraGarMain: async function() {
+                    window.location.href = "main.html";
+                }
+            }
+        });
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while(c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if(c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        var timerDT = setInterval(getDT, 1000);
+        function getDT() {
+            let today = new Date();
+            app.dia = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+            app.hora = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        };
+    </script>
+</html>

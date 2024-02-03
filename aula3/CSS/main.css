@@ -1,0 +1,188 @@
+/*Define o estilo do header*/
+#header {
+    height: 80px;
+    border: solid blue;
+    background-color: lightgray;
+}
+
+/*Cria espaco na parte esquerda do header*/
+#cantoEsquerdo {
+    float:left;
+    height: 80px;
+    width: 350px;
+}
+
+/*Junta as imagens e o texto na parte central do header*/
+#headerCentral {
+    height: 80px;
+    width: 980px;
+    float: left;
+    text-align: center;
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+    font-size: 150%;
+}
+
+/*Imagem do logo da feec*/
+#feec {
+    float: left;
+}
+
+/*Imagem do logo da unicamp com o logo do gitlab*/
+#unigit {
+    max-width:150px;
+    max-height:150px;
+    width: auto;
+    height: auto;
+    float: right;
+    display: inline-block;
+}
+
+/*Cria espaco no canto direito do header*/
+#cantoDireito {
+    float: right;
+    height: 80px;
+    width: 350px;
+}
+
+/*Define o estilo do menu*/
+#menu{
+    height: 600px;
+    weight: 250px;
+    background-color: lightgray;
+    border:solid blue;
+    float:left;
+    padding: 10px;
+    margin: 30px;
+}
+
+/*Define o estilo dos itens do menu*/
+#menuLista {
+    font-size:120%;
+    font-family:Arial, Helvetica, sans-serif;
+    color:blue;
+    list-style-type: none;
+    padding: 0px;
+    text-decoration: none;
+}
+
+/*Titulos do menu*/
+#tituloLista {
+    color:black;
+}
+
+/*Cada item da lista*/
+li {
+    padding: 20px;
+}
+
+/*Links*/
+a{
+    text-decoration:none;
+}
+
+/*Links com o mouse em cima*/
+a:hover {
+    text-decoration: underline;
+}
+
+/*Links visitados*/
+a:visited {
+    color:darkred;
+}
+
+/*Titulo do formulario*/
+h1 {
+    font-size: 200%;
+}
+
+/*Subtitulo do formulario*/
+h2 {
+    padding: 10px;
+}
+
+/*Coluna direita da parte central*/
+#colunaDireita{
+    float:right;
+    padding: 230px;
+    margin: 30px;
+}
+
+/*Formulario*/
+#principal {
+    font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+    font-size: 16;
+    color:black;
+    font-weight: bold;
+    padding: 10px;
+    margin-left: 200px;
+} 
+
+/*Estilo da data*/
+#data_local {
+    font-weight: normal;
+    float: right;
+}
+
+/*Coluna esquerda do formulario*/
+#colunaEsquerdaPrincipal {
+    float: left;
+    padding: 20px;
+}
+
+/*Coluna direita do formulário*/
+#colunaDireitaPrincipal {
+    float: right;
+    padding:20px;
+}
+
+label {
+    padding: 20px;
+}
+
+/*Input*/
+input {
+    margin: 30px;
+    padding: 8px;
+    font-size: 100%;
+    text-transform: uppercase;
+}
+
+/*Drop down*/
+select {
+    margin: 30px;
+    padding: 8px;
+    background-color:white;
+    font-size: 100%;
+}
+
+/*Botao submit*/
+button{
+    height:40px; 
+    width:100px; 
+    float: right;
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 120%;
+}
+
+/*Botao quando clicado*/
+button:active{
+    background-color:darkgray;
+}
+
+/*Footer*/
+#footer {
+    border-top:solid black 2mm;
+    text-align: center;
+    clear: both;
+}
+
+/*Logo da unicamp do footer*/
+#unicamp {
+    max-width:170px;
+    max-height:170px;
+    width: auto;
+    height: auto;
+    float: right;
+    display: inline-block;
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+  Incluir arquivo CSS externo 
+  <link rel="stylesheet" href="style.css">
+  -->
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<body>
+
+<h2>Inserção e Update de Usuários</h2>
+<br>
+
+<div id="app">
+  <form @submit.prevent="clear">
+    Usuário: <input type="text" v-model="usuario" size=10>
+    Papel: 
+    <select type="text" v-model="papel">
+      <option value="user">user</option>
+      <option value="admin">admin</option>
+    </select>
+    Password: <input type="text" v-model="password" size=25>
+    <button v-on:click="doPost()">Insert</button> &nbsp;
+    <button v-on:click="doPut()">Update</button> &nbsp;
+    <br><br>
+  </form>
+
+  <hr>
+  <h2>Consulta e Deleção de Usuários</h2>
+  <br>
+  <form @submit.prevent="clear">
+    Usuário: <input type="text" v-model="usuario_consulta" size=10>
+    <button v-on:click="doGet()">Consulta</button> &nbsp;
+    <button v-on:click="doDelete()">Delete</button> &nbsp 
+    <br><br>
+  </form>
+  <hr>
+
+  <h2>Resultado</h2>
+  {{ payload.resultado }}
+  <table class="w3-table-all w3-centered">
+    <thead>   
+      <tr class="w3-center w3-teal">
+          <th>Usuário</th>
+          <th>Papel</th>
+          <th>Password</th>
+      </tr>
+    </thead>
+      <tr v-for="(item,index) in payload.usuarios">
+          <td>{{ item.usuario }}</td>
+          <td>{{ item.papel }}</td>
+          <td>{{ item.password }}</td>
+      </tr>
+  </table>
+  <br>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: { 
+         payload: '',
+         codigo: '',  
+         usuario: '',
+         papel: '',
+         password: '',
+         usuario_consulta: ''
+    },
+    methods: {
+    
+    // GET
+    doGet: async function () {
+       var url = '/usuarios/'+app.usuario_consulta;
+       var data = {"usuario": app.usuario, "papel": app.papel, "password": app.password};
+       var request = axios({"method": "get","url": url});
+       try {
+         response = await request
+       } catch (error) {
+         response = {"data": { "resultado": "Opção disponível apenas para administradores." }, "status": 404, "statusText": "Error"}
+       } 
+       app.payload = response.data
+       app.codigo = response.status + " "+ response.statusText
+    },
+  
+    // POST
+    doPost: async function () {
+       var url = '/cadastrar';
+       var data = {"usuario": app.usuario, "papel": app.papel, "password": app.password};
+       var request = axios({
+                   "method": "post",
+                   "url": url,
+                   "headers": { "Content-Type": "application/json" },
+                   "data": data});
+        try {
+         response = await request
+       } catch (error) {
+         response = response = {"data": { "resultado": "Opção disponível apenas para administradores." }, "status": 404, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText
+    },
+  
+    // PUT
+    doPut: async function() {
+       var url = '/usuarios/'+app.usuario;
+              
+       if ( (app.papel == '') & (app.password == '') ) {
+          var data = {"usuario": app.usuario};
+        }
+       if ( (app.papel == '') & (app.password != '') ) {
+          var data = {"usuario": app.usuario, "password": app.password};
+        }
+       if ( (app.papel != '') & (app.password == '') ) {
+          var data = {"usuario": app.usuario, "papel": app.papel};
+        }
+       if ( (app.papel != '') & (app.password != '') ) {
+          var data = {"usuario": app.usuario, "papel": app.papel, "password": app.password};
+        }
+
+       var request = axios({
+                   "method": "put",
+                   "url": url,
+		   "headers": { "Content-Type": "application/json" },		   
+                   "data": data});
+        try {
+        response = await request
+       } catch (error) {
+         response = {"data": { "resultado": "Opção disponível apenas para administradores." }, "status": 404, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText
+    },
+  
+    // DELETE
+    doDelete: async function() {
+       var url = '/usuarios/'+app.usuario_consulta;
+       var request = axios({
+                   "method": "delete",
+                   "url": url});
+        try {
+        response = await request
+       } catch (error) {
+         response = {"data": { "resultado": "Opção disponível apenas para administradores." }, "status": 404, "statusText": "Error"}
+       }  
+        app.payload = response.data
+        app.codigo = response.status + " "+ response.statusText            
+     },
+  
+    // CLEAR
+    doClear: async function() {
+      app.codigo = "";
+      app.payload = "";
+      }
+    }
+   }
+  )
+
+  </script> 
+</body>
+</html>

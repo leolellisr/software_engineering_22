@@ -1,0 +1,11 @@
+db.usuarios.insertOne({"usuario":"elias", "papel":"admin", "password":"kento"})
+use usuariosDB
+db.usuarios.insertOne({"usuario":"root", "papel":"root", "password":""})
+use usuariosDB
+db.usuarios.insertOne({"usuario":"Lanterna", "papel":"admin", "password":"verde"})
+use usuariosDB
+exit
+db.usuarios.find().pretty()
+db.usuarios.insertOne({"usuario":"Maravilha", "papel":"admin", "password":"flash"})
+use usuariosDB
+exit

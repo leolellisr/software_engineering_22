@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+<style type="text/css">
+  .tg  {border-collapse:collapse;border-spacing:0;}
+  .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg .tg-baqh{text-align:center;vertical-align:top}
+  .tg .tg-ahzk{background-color:#6665cd;color:#f8ff00;text-align:center;vertical-align:top}
+</style>
+<body>
+
+<h1>Cadastro de Usuários</h1>
+
+<br>
+
+<div id="app">
+  <form @submit.prevent="clear">
+    Usuário: <input id="input1" type="text" v-model="nome"><br><br>
+    Senha: <input id="input2" type="password" v-model="senha"><br><br>
+    Papel: <select id="select1" name="papel" v-model="papel">
+      <option id="option1" value="user">Usuário</option>
+      <option id="option2" value="admin">Administrador</option>
+    </select><br><br>
+    <button id="button1" v-on:click="acessa()">ACESSA</button> &nbsp;
+    <button id="button2" v-on:click="insere()">INSERE</button> &nbsp;
+  </form>
+  <br><br>
+  <div id="resultado"><b>Resultado: </b>{{ mensagem }}</div><br><br>
+
+  <table id="table1" class="tg">
+    <thead v-if="usuarios.length > 0">
+      <tr>
+          <th class="tg-ahzk"> Usuário </th>
+          <th class="tg-ahzk"> Papel </th>
+          <th class="tg-ahzk"> Operation </th>
+      </tr>
+    </thead>
+    <tbody v-if="usuarios.length > 0">
+        <tr v-for="usuario in usuarios">
+          <td class="tg-baqh"> {{ usuario.nome }} </td>
+          <td class="tg-baqh"> {{ usuario.papel }} </td>
+          <td class="tg-baqh"><button v-on:click="atualiza(usuario.nome,usuario.senha,usuario.papel)">ATUALIZA SENHA</button> &nbsp;
+            <button v-on:click="remo(usuario.nome)">REMOVE</button></td>
+        </tr>
+    </tbody>
+  </table>
+  
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+         mensagem: '',
+         nome: '',
+         senha: '',
+         papel: '',
+         usuarios: ''
+    },
+    methods: {
+
+    // ACESSA
+    acessa: async function() {
+     //app.provideclear(); 
+     app.usuarios = '';
+     app.senha = '';
+     var url = "/usuarios";
+     if (app.nome.length > 0) url = "/usuarios/" + app.nome;
+     var request = axios({
+                 "method": "get",
+                 "url": url});
+      try {
+         response = await request
+         if(response.usuarios != null) {
+            app.mensagem = response;
+            app.usuarios = response.data.usuarios;
+          } else {
+              //app.clear();
+              app.mensagem = response.data.resultado;
+              app.usuarios = response.data.usuarios;
+          }         
+      } catch (error) {
+         app.mensagem = "Usuário não autenticado ou não autorizado"
+      }
+    },
+
+    // INSERE
+    insere: async function() {
+      //app.provideclear();
+      app.usuarios = '';
+      if (!app.nome || !app.senha || !app.papel) {
+             //app.provideclear();
+             app.mensagem = "É necessário preencher todos os campos acima";
+             return;
+      }
+      var data = {"nome": app.nome,
+                  "senha": app.senha,
+                  "papel": app.papel};
+      app.senha = '';
+      var request = axios({
+                 "method": "post",
+                 "url": "/usuarios",
+                 "data": data});
+      try {
+         response = await request
+         app.mensagem = response.data.resultado;
+      } catch (error) {
+        app.mensagem = "Usuário não autenticado ou não autorizado";
+      }
+    },
+
+    // ATUALIZA SENHA
+    atualiza: async function(nome,senha,papel) {
+      //app.provideclear();
+      if (!app.senha) {
+            //app.provideclear();
+            app.mensagem = "Preencha o campo Senha";
+            return;
+     }
+     var data = {"nome": nome,
+                 "senha": app.senha,
+                 "papel": papel};
+     app.senha = '';
+     var request = axios({
+                 "method": "put",
+                 "url": "/usuarios/" + nome,
+                 "headers": { "Content-Type": "application/json" },
+                 "data": data});
+     try {
+        response = await request
+        app.mensagem = response.data.resultado;
+     } catch(error) {
+        app.mensagem = "Usuário não autenticado ou não autorizado";
+     }
+  },
+
+  // REMOVE
+  remo: async function(nome) {
+     app.provideclear();
+     app.senha = '';
+     app.mensagem = nome;
+     var request = axios({
+                 "method": "delete",
+                 "url": "/usuarios/" + nome});
+      try {
+        response = await request
+        app.mensagem = response.data.resultado;
+      } catch(error) {
+        app.mensagem = "Usuário não autenticado ou não autorizado";
+      }
+   },
+
+  // CLEAR
+  provideclear: async function() {
+    app.usuarios = '';
+    app.mensagem = '';
+    app.nome = '';
+    app.senha = '';
+    app.papel = '';
+    }
+  }
+  } 
+  )
+  </script> 
+
+</body>
+</html>
+

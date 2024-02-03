@@ -1,0 +1,157 @@
+
+header {
+  background-color:hsla(215, 50%, 23%, 1);
+  border-style: solid;
+  border-width: 5px;
+  color: hsla(215, 50%, 23%, 1);
+  font-family: 'Calibri';
+}
+h1 {
+  color: hsla(105, 55%, 96%, 1);
+  text-align: center;
+}
+p {
+  color: hsla(105, 55%, 96%, 1);
+  text-align: right;
+}
+span {
+  color: hsla(105, 55%, 96%, 1);
+  float: left;
+}
+body {
+  background-color:hsla(182, 43%, 76%, 1);
+  font-family:'Georgia'; 
+}
+#finish {
+  background-color: hsla(105, 55%, 96%, 1);
+  width: 97%;
+  height: 73%;
+  padding: 10px;
+  border: 3px solid hsla(105, 55%, 96%, 1);
+  margin: 0;
+  bottom: 2%;
+  position: absolute;
+}
+#add {
+  background-color: hsla(105, 55%, 96%, 1);
+  width: 46.5%;
+  height: 68%;
+  padding: 10px;
+  border: 3px solid hsla(105, 55%, 96%, 1);
+  margin: 0;
+  right: 0.65%;
+  bottom: 2%;
+  position: absolute;
+}
+#item {
+  background: hsla(203, 39%, 44%, 1);
+  display: block;
+  margin-right: auto;
+  margin-left: 10%;
+  color: hsla(105, 55%, 96%, 1);;
+  float: left;
+}
+#itemLabel {
+  color: hsla(215, 50%, 23%, 1);
+  display: block;
+  margin-left: 15%;
+  float: left;
+}
+#itemV {
+  background: hsla(203, 39%, 44%, 1);
+  display: block;
+  margin-right: 10%;
+  margin-left: auto;
+  color: hsla(105, 55%, 96%, 1);;
+  float: right;
+}
+#itemVz {
+  background: hsla(203, 39%, 44%, 1);
+  display: block;
+  margin-left: 10%;
+  color: hsla(105, 55%, 96%, 1);;
+  float: left;
+}
+#itemVzLabel {
+  color: hsla(215, 50%, 23%, 1);
+  display: block;
+  margin-left: 12%;
+  float: left;
+}
+#itemVLabel {
+  color: hsla(215, 50%, 23%, 1);
+  display: block;
+  margin-right: 16%;
+  float: right;
+}
+#II {
+  display: block;
+  margin-right: 16%;
+  float: right;
+  background: hsla(203, 39%, 44%, 1);
+  color: hsla(105, 55%, 96%, 1);
+}
+#AI {
+  display: block;
+  margin-right: 14.65%;
+  float: right;
+  background: hsla(203, 39%, 44%, 1);
+  color: hsla(105, 55%, 96%, 1);
+}
+#resp {
+  text-align: left;
+  color:hsla(215, 50%, 23%, 1);
+}
+#list {
+  background-color: hsla(105, 55%, 96%, 1);
+  height: 61%;
+  width: 46.5%;
+  padding: 10px;
+  border: 3px solid hsla(105, 55%, 96%, 1);
+  margin: 0;
+  left: 0.65%;
+  bottom: 9%;
+  position: absolute;
+}
+#quit {
+  position: absolute;
+  left: 15%;
+  bottom: 3%;
+  background: hsla(203, 39%, 44%, 1);
+  color: hsla(105, 55%, 96%, 1);
+}
+
+#but {
+  background: hsla(203, 39%, 44%, 1);
+  color: hsla(105, 55%, 96%, 1);
+}
+.table {
+  overflow-y: auto;
+  height: 95%;
+}
+.table .tg-head .tg-ahzk {
+  position: sticky;
+  top: 0;
+}
+.tg {
+  border-collapse: collapse;
+  width: 100%;
+}
+.tg-baqh {
+  padding: 8px 16px;
+  border: 1px solid black;
+  color: hsla(215, 50%, 23%, 1);
+}
+.tg-ahzk {
+  background: hsla(215, 50%, 23%, 1);
+  color : hsla(105, 55%, 96%, 1);
+  padding: 8px 16px;
+  border: 1px solid black;
+}
+#beb, #prat, #sobre{
+  background: hsla(203, 39%, 44%, 1);
+  color : hsla(105, 55%, 96%, 1);
+}
+#quitFinish {
+  color : hsla(105, 55%, 96%, 1);
+}

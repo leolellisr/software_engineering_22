@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .link {
+      color: blue;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .link:hover {
+      color: violet;
+    }
+  </style>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+<body>
+
+<h2>Autenticação de Usuários</h2>
+
+<br>
+<div id="app">
+  <form @submit.prevent="clear">
+    Usuário: <input type="text" v-model="user"><br><br>
+    Senha: <input type="password" v-model="pass"><br><br>
+    <button v-on:click="doPost()">ENVIA</button><br><br>
+  </form>
+    <b>Resultado:</b>&nbsp;{{ result }} <div v-if="sucesso == true"  ><a @click="closeWindow" class="link"> Clique aqui para fechar a janela </a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+var app = new Vue({
+    el: '#app',
+    data: { 
+         result: ' ',
+         user: '',
+         pass: '',
+         sucesso: false 
+    },
+    methods: {
+      // LOGIN
+      doPost: async function() {
+        var url = "/authentication";
+        var data = {"user": app.user, "pass": app.pass};
+        var request = axios({
+                 "method": "post",
+                 "url": url,
+                 "headers": { "Content-Type": "application/json" },
+                 "data": data});
+        try {
+            response = await request
+            app.result = response.data;
+            app.sucesso = true;
+            
+        } catch (error) {
+            app.result = "Erro na autenticação";
+            app.sucesso = false;
+        }                  
+      },
+      // CLOSE WINDOW  
+      closeWindow: async function() {
+          window.close();
+      }
+    }
+  });
+
+</script> 
+
+</body>
+</html>
+

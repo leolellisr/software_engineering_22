@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Pesquisa de Passagem</title>
+  <meta charset="UTF-8">
+  <meta name="author" content="Gustavo de Souza dos Reis">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+</head>
+<style type="text/css">
+  body {font-family: Helvetica, sans-serif;}  
+  .tg  {border-collapse:collapse;border-spacing:0;}
+  .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Helvetica, sans-serif;font-size:14px;
+    overflow:hidden;padding:10px 20px;word-break:normal;}
+  .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Helvetica, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:10px 20px;word-break:normal;}
+  .tg .tg-baqh{text-align:center;vertical-align:top}
+  .tg .tg-ahzk{background-color:#BEE3DB;color:#555B6E;text-align:center;vertical-align:top}
+</style>
+<body style="background-color: #FAF9F9;">
+
+<h1 style="text-align: center;">Pesquisa de Passagens</h1>
+
+<br>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+
+<div id="app">
+
+  <form @submit.prevent="clear">
+
+    <div style="margin-left: 10%;">
+      <label for="forigem">Origem:</label>
+      <input type="text" id="forigem" class="form-control-sm" v-model="recursoOrigem">
+      <br>
+      <label for="fdestino">Destino:</label>
+      <input type="text" id="fdestino" class="form-control-sm" v-model="recursoDestino">
+      <br>
+      <label for="fdata">Data:</label>
+      <input type="text" id="fdata" class="form-control-sm" v-model="recursoData">
+      <br><br>
+      <button type="button" class="btn btn-outline-primary" v-on:click="doGet()" style="margin-left:40%;">Pesquisar</button>
+    </div>
+
+    <hr>
+
+    <h2 style="text-align: center;">Resultado</h2>
+    <table class="tg" style="margin-left: auto; margin-right: auto;">
+      <thead v-if="viagens.length > 0">
+        <tr>
+          <th class="tg-ahzk">Origem</th>
+          <th class="tg-ahzk">Destino</th>
+          <th class="tg-ahzk">Horario Partida</th>
+          <th class="tg-ahzk">Data Partida</th>
+          <th class="tg-ahzk">Horario Chegada</th>
+          <th class="tg-ahzk">Data Chegada</th>
+        </tr>
+      </thead>
+      <tbody v-if="viagens.length > 0">
+        <tr v-for="viagem in viagens">
+          <td class="tg-baqh">{{viagem.origem}}</td>
+          <td class="tg-baqh">{{viagem.destino}}</td>
+          <td class="tg-baqh">{{viagem.horarioPartida}}</td>
+          <td class="tg-baqh">{{viagem.dataPartida}}</td>
+          <td class="tg-baqh">{{viagem.horarioChegada}}</td>
+          <td class="tg-baqh">{{viagem.dataChegada}}</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </form>    
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: { 
+         payload: '',
+         codigo: '',
+         recursoOrigem: '',
+         recursoDestino: '',
+         recursoData: '',
+         recurso: '/viagens',
+         viagens: '',
+         viagem: '',
+         origem: '',
+         destino: '',
+         horarioPartida: '',
+         horarioChegada: '',
+         dataPartida: '',
+         dataChegada: ''
+    },
+    methods: {
+    
+    // GET
+    doGet: async function () {
+       var url = "/viagens/" + app.recursoOrigem + "/" + app.recursoDestino;
+       if (app.recursoData.length >0){
+         url = "/viagens/" + app.recursoOrigem + "/" + app.recursoDestino + "/" + app.recursoData.replace("/", ".");
+       }
+       var request = axios({"method": "get","url": url});
+       try {
+         response = await request
+       } catch (error) {
+         response = {"data": { "resultado": " URL inválida" }, "status": 404, "statusText": "Error"}
+       }
+       app.viagens = response.data.viagens;
+       app.payload = response.data;
+       app.codigo = response.status + " "+ response.statusText;
+       console.log(app.viagens)
+    }
+    }
+   }
+  
+  )
+  </script> 
+</body>
+</html>
+

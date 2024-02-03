@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> 
+<script src="https://unpkg.com/vue-cookies@1.7.4/vue-cookies.js"></script>
+<style type="text/css">
+  .tg  {border-collapse:collapse;border-spacing:0;}
+  .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+    font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+  .tg .tg-baqh{text-align:center;vertical-align:top}
+  .tg .tg-ahzk{background-color:#6665cd;color:#f8ff00;text-align:center;vertical-align:top}
+</style>
+<body>
+
+<h1>Lista de usuários</h1>
+
+<br>
+
+<div id="app">
+  <h2>Loged -> User: {{cookiejar.user}} / Role: {{cookiejar.role}}</h2><br/>
+  <form @submit.prevent="clear">
+    Usuário: <input type="text" v-model="user"><br><br>
+    Papel: 
+    <select v-model="selected">
+        <option disabled value="">-</option>
+        <option value="user">user</option>
+        <option value="admin">admin</option>
+    </select><br><br>
+    Senha: <input type="password" v-model="pass"><br><br>
+    <button v-on:click="acessa()">ACESSA</button> &nbsp;
+    <button v-on:click="insere()">INSERE</button> &nbsp;
+  </form>
+  <br><br>
+  <b>Resultado:</b> {{ mensagem }}
+  
+  
+  <table class="tg">
+    <thead v-if="users.length > 0">
+      <tr>
+          <th class="tg-ahzk"> USERNAME </th>
+          <th class="tg-ahzk"> ROLE </th>
+          <th class="tg-ahzk"> PASSWORD </th>
+          <th class="tg-ahzk"> Operation </th>
+      </tr>
+    </thead>
+    <tbody v-if="users.length > 0">
+        <tr v-for="user in users">
+          <td class="tg-baqh"> {{ user.user }} </td>
+          <td class="tg-baqh"> {{ user.role }} </td>
+          <td class="tg-baqh"> {{ user.pass }} </td>
+          <td class="tg-baqh"><button v-on:click="atualiza(user.user,user.role,user.pass)">ATUALIZA</button> &nbsp;
+            <button v-on:click="remo(user.user)">REMOVE</button></td>
+        </tr>
+    </tbody>
+  </table>
+  
+</div>
+
+<script type="text/x-template" id="tabletemplate">
+  <tr>
+      <td class="tg-baqh"> {{ user }} </td>
+      <td class="tg-baqh"> {{ role }} </td>
+      <td class="tg-baqh"> {{ pass }} </td>
+      <td class="tg-baqh">  </td>
+  </tr>
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.2/axios.js"></script>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: { 
+         payload: '',
+         codigo: '',
+         recurso: '/users',
+         repr: '{"user": "blabla", "role": "admin", "pass": "blablabla"}',
+         mensagem: '',
+         huser: '',
+         hrole: '',
+         hpass: '',
+         users: '',
+         user: '',
+         role: '',
+         pass: ''
+    },
+
+    //INFO DO USER LOGADO
+    computed: {
+      cookiejar: function() {
+        this.up;
+        if(document.cookie == ''){
+          return {"user": "", "role":""};
+        } else {
+          return JSON.parse(decodeURIComponent(document.cookie).replace('userAuth=',''));
+        }
+      }
+    },
+
+    methods: {
+
+    // ACESSA
+    acessa: async function() {
+     app.provideclear(); 
+     var url = "/users";
+     if (app.user.length > 0) url = "/users/" + app.user;
+     var request = axios({
+                 "method": "get",
+                 "url": url});
+      try {
+         response = await request
+         if(response.alunos != null) {
+            app.huser = "user";
+            app.hrole = "role";
+            app.hpass = "pass";
+            app.mensagem = response;
+            app.users = response.data.users;
+          } else {
+              //app.clear();
+              app.mensagem = response.data.resultado;
+              app.payload = response;
+              app.users = response.data.users;
+              //app.mensagem = response;
+          }         
+      } catch (error) {
+         app.mensagem = "Usuário não autenticado - Faça login primeiro"
+      }
+    },
+
+    // INSERE
+    insere: async function() {
+      app.provideclear();
+      if (app.user == undefined || app.user.length == 0 ||
+          app.role == undefined || app.role.length == 0 ||
+          app.pass == undefined || app.pass.length == 0) {
+             app.provideclear();
+             app.mensagem = "É necessário preencher todos os campos acima";
+             return;
+      }
+      var data = {"user": app.user,
+                  "role": app.role,
+                  "pass": app.pass};
+      var request = axios({
+                 "method": "post",
+                 "url": "/users",
+                 "data": data});
+      try {
+         response = await request
+         app.mensagem = response.data.resultado;
+         app.payload = response;
+      } catch (error) {
+        app.mensagem = "Usuário não autenticado ou sem autorização para efetuar inserções - Faça login com um usuário autorizado";
+      }
+    },
+
+    // ATUALIZA
+    atualiza: async function(user,role,pass) {
+      app.provideclear();
+      if ((app.role == undefined || app.role.length == 0) &&
+          (app.pass == undefined || app.pass.length == 0)) {
+            app.provideclear();
+            app.mensagem = "Preencha os campos role e pass";
+            return;
+     }
+     if (app.role == undefined || app.role.length == 0) a_role = role;
+     else a_role = app.role;
+     if (app.pass == undefined || app.pass.length == 0) a_pass = pass;
+     else a_pass = app.pass;
+      var data = {"user": user,
+                 "role": a_role,
+                 "pass": a_pass};
+      var request = axios({
+                 "method": "put",
+                 "url": "/users/" + user,
+                 "headers": { "Content-Type": "application/json" },
+                 "data": data});
+      try {
+        response = await request
+        app.mensagem = response.data.resultado;
+      } catch(error) {
+        app.mensagem = "O usuário autenticado não está autorizado a fazer modificações";
+      }
+  },
+
+  // REMOVE
+  remo: async function(user) {
+     app.provideclear();
+     if (user == undefined || user.length == 0) {
+         app.provideclear();
+         app.mensagem = "preencha o user";
+         return;
+     }
+     app.mensagem = user;
+     var request = axios({
+                 "method": "delete",
+                 "url": "/users/" + user});
+      try {
+        response = await request
+        app.mensagem = response.data.resultado;
+        app.payload = response;
+      } catch(error) {
+        app.mensagem = "O usuário autenticado não está autorizado a fazer modificações";
+      }
+   },
+
+  // CLEAR
+  provideclear: async function() {
+    app.users = [];
+    app.mensagem = "";
+    app.huser = app.hrole = app.hpass = "";
+   }
+  }
+  } 
+  )
+  </script> 
+
+</body>
+</html>
+
